@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertidor de Imagen a Base64</title>
+    <style>
+        :root {
+            /* Dark theme variables */
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #2d2d2d;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --accent-color: #4CAF50;
+            --accent-hover: #45a049;
+            --accent-secondary: #2196F3;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: var(--gradient-primary);
+            color: var(--text-primary);
+        }
+        .container {
+            background: var(--border-color);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover {
+            border-color: var(--text-secondary);
+            background: var(--border-color);
+        }
+        input[type="file"] {
+            margin: 20px 0;
+            padding: 10px;
+            background: var(--bg-secondary);
+            border: none;
+            border-radius: 5px;
+            color: var(--text-primary);
+        }
+        input[type="file"]::-webkit-file-upload-button {
+            background: var(--border-color);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: var(--text-primary);
+            cursor: pointer;
+        }
+        textarea {
+            width: 100%;
+            height: 200px;
+            margin: 20px 0;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-family: monospace;
+            resize: vertical;
+        }
+        .preview {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .preview img {
+            max-width: 300px;
+            max-height: 300px;
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+        }
+        .copy-btn {
+            background: var(--accent-color);
+            color: var(--text-primary);
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        .copy-btn:hover {
+            background: var(--accent-hover);
+        }
+        .instructions {
+            background: var(--border-color);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .instructions h3 {
+            margin-top: 0;
+        }
+        .instructions code {
+            background: var(--bg-secondary);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🖼️ Convertidor de Imagen a Base64</h1>
+        
+        <div class="upload-area">
+            <p>📁 Selecciona tu imagen para convertir a Base64</p>
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+        
+        <div class="preview" id="preview" style="display: none;">
+            <h3>Vista previa:</h3>
+            <img id="previewImg" alt="Vista previa">
+        </div>
+        
+        <div id="result" style="display: none;">
+            <h3>Resultado Base64:</h3>
+            <textarea id="base64Output" readonly placeholder="El código Base64 aparecerá aquí..."></textarea>
+            <button class="copy-btn" onclick="copyToClipboard()">📋 Copiar al Portapapeles</button>
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Instrucciones:</h3>
+            <ol>
+                <li>Selecciona tu imagen usando el botón de arriba</li>
+                <li>Espera a que se genere el código Base64</li>
+                <li>Copia el código completo (incluyendo <code>data:image/...</code>)</li>
+                <li>En tu archivo HTML, reemplaza el <code>src</code> de la imagen con este código</li>
+            </ol>
+            
+            <h4>Ejemplo de uso:</h4>
+            <code>&lt;img src="data:image/jpeg;base64,/9j/4AAQ..." alt="Mi foto"&gt;</code>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('imageInput').addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Mostrar vista previa
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewImg = document.getElementById('previewImg');
+                previewImg.src = e.target.result;
+                document.getElementById('preview').style.display = 'block';
+                
+                // Mostrar resultado base64
+                document.getElementById('base64Output').value = e.target.result;
+                document.getElementById('result').style.display = 'block';
+            };
+            
+            reader.readAsDataURL(file);
+        });
+        
+        function copyToClipboard() {
+            const textarea = document.getElementById('base64Output');
+            textarea.select();
+            textarea.setSelectionRange(0, 99999); // Para móviles
+            
+            try {
+                document.execCommand('copy');
+                const btn = document.querySelector('.copy-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ ¡Copiado!';
+                btn.style.background = 'var(--accent-secondary)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = 'var(--accent-color)';
+                }, 2000);
+            } catch (err) {
+                alert('Error al copiar. Por favor, selecciona y copia manualmente.');
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jorge Acedo - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navegación -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span>Jorge Acedo</span>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Inicio</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">Sobre mí</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#projects" class="nav-link">Proyectos</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#skills" class="nav-link">Habilidades</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#soft-skills" class="nav-link">Soft Skills</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contacto</a>
+                </li>
+            </ul>
+            <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
+                <i class="fas fa-moon"></i>
+            </button>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Sección Hero -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Hola, soy Jorge Acedo
+                </h1>
+                <p class="hero-subtitle">Desarrollador de Software</p>
+                <p class="hero-description">
+                    Transformo ideas en experiencias digitales excepcionales. 
+                    Especializado en desarrollo web moderno y soluciones innovadoras.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">Ver Proyectos</a>
+                    <a href="#contact" class="btn btn-secondary">Contactar</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="profile-card">
+                    <div class="profile-img">
+                        <img src="profile.svg" alt="Jorge Acedo" class="profile-avatar">
+                    </div>
+                    <div class="floating-elements">
+                        <div class="floating-icon" style="--delay: 0s">
+                            <i class="fab fa-java"></i>
+                        </div>
+                        <div class="floating-icon" style="--delay: 1.5s">
+                            <i class="fab fa-react"></i>
+                        </div>
+                        <div class="floating-icon" style="--delay: 3s">
+                            <i class="fab fa-js-square"></i>
+                        </div>
+                        <div class="floating-icon" style="--delay: 4.5s">
+                            <i class="fab fa-docker"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Sobre mí -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">Sobre mí</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        Soy un desarrollador apasionado por crear soluciones digitales que marquen la diferencia. 
+                        Con 3 años de experiencia en desarrollo de software, me especializo en el desarrollo 
+                        de aplicaciones web modernas con React y Node.js, así como aplicaciones en general con Java.
+                    </p>
+                    <p>
+                        Mi enfoque se centra en escribir código limpio, escalable y mantenible, 
+                        mientras trabajo en equipo para entregar productos de alta calidad que 
+                        superen las expectativas del usuario. Además, utilizo herramientas de IA 
+                        para programar de manera más rápida y eficiente.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <span class="stat-number">3+</span>
+                            <span class="stat-label">Años de Experiencia</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">3+</span>
+                            <span class="stat-label">Proyectos Completados</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">5+</span>
+                            <span class="stat-label">Tecnologías Dominadas</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="about-card">
+                        <i class="fas fa-code"></i>
+                        <h3>Desarrollo de Software</h3>
+                        <p>Creación de aplicaciones modernas y eficientes</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Proyectos -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">Mis Proyectos</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>iRacing Setup Assistant</h3>
+                        <p>Aplicación web completa para ayudar a usuarios de iRacing a encontrar, generar y compartir configuraciones óptimas para sus coches en diferentes circuitos.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">Node.js</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/jorgeoliver7/iRacingSetupAssistant" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
+                            <a href="https://i-racing-setup-assistant.vercel.app/" target="_blank" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-flag-checkered"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Racing Team Management</h3>
+                        <p>Sistema integral de gestión para equipos de racing que permite administrar vehículos, miembros del equipo, eventos, mantenimiento y logística.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Java Spring Boot</span>
+                            <span class="tech-tag">React</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/jorgeoliver7/RacingTeamManagement" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>F1 Championship Predictor</h3>
+                        <p>Aplicación de machine learning que predice los resultados del campeonato mundial de Fórmula 1 2025 utilizando análisis de datos históricos y algoritmos predictivos.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Java</span>
+                            <span class="tech-tag">Machine Learning</span>
+                            <span class="tech-tag">Data Analysis</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="https://github.com/jorgeoliver7/F1ChampionshipPredictor" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Habilidades -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Habilidades Técnicas</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Frontend</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">JavaScript</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">React</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">CSS/SASS</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">HTML</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">Java</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Spring Boot</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Node.js</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">PostgreSQL</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Herramientas</h3>
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">Git</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">GitHub</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Docker</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Educación -->
+    <section id="education" class="skills">
+        <div class="container">
+            <h2 class="section-title">Educación</h2>
+            <div class="skills-content">
+                <div class="education-item">
+                    <div class="education-header">
+                        <h3>Grado Superior en Desarrollo de Aplicaciones Web</h3>
+                        <span class="education-period">Universae</span>
+                    </div>
+                    <p class="education-description">Formación especializada en desarrollo web con tecnologías modernas, bases de datos y metodologías de desarrollo.</p>
+                </div>
+                <div class="education-item">
+                    <div class="education-header">
+                        <h3>Estudios de Derecho</h3>
+                        <span class="education-period">Universidad de Cádiz</span>
+                    </div>
+                    <p class="education-description">Varios años de formación jurídica que me proporcionaron habilidades analíticas y de resolución de problemas.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Idiomas -->
+    <section id="languages" class="skills">
+        <div class="container">
+            <h2 class="section-title">Idiomas</h2>
+            <div class="skills-content">
+                <div class="skill-category">
+                    <div class="skill-list">
+                        <div class="skill-item">
+                            <span class="skill-name">Español (Nativo)</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 100%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Inglés (B2 Cambridge)</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Habilidades Blandas -->
+    <section id="soft-skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Soft Skills</h2>
+            <div class="soft-skills-content">
+                <div class="soft-skills-grid">
+                    <div class="soft-skill-card">
+                        <div class="soft-skill-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Comunicación Efectiva</h3>
+                        <p>Transmisión clara de ideas complejas, tanto oral como escrita.</p>
+                        <ul class="soft-skill-list">
+                            <li>Presentaciones técnicas</li>
+                            <li>Documentación clara</li>
+                            <li>Comunicación cliente-desarrollador</li>
+                        </ul>
+                    </div>
+
+                    <div class="soft-skill-card">
+                        <div class="soft-skill-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Trabajo en Equipo</h3>
+                        <p>Colaboración efectiva en equipos multidisciplinarios con metodologías ágiles.</p>
+                        <ul class="soft-skill-list">
+                            <li>Metodologías ágiles (Scrum)</li>
+                            <li>Colaboración remota</li>
+                            <li>Liderazgo técnico</li>
+                        </ul>
+                    </div>
+
+                    <div class="soft-skill-card">
+                        <div class="soft-skill-icon">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <h3>Resolución de Problemas</h3>
+                        <p>Enfoque analítico y creativo para resolver problemas complejos.</p>
+                        <ul class="soft-skill-list">
+                            <li>Pensamiento crítico</li>
+                            <li>Debugging avanzado</li>
+                            <li>Optimización de procesos</li>
+                        </ul>
+                    </div>
+
+                    <div class="soft-skill-card">
+                        <div class="soft-skill-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Gestión del Tiempo</h3>
+                        <p>Priorización de tareas y cumplimiento de deadlines con calidad.</p>
+                        <ul class="soft-skill-list">
+                            <li>Planificación de sprints</li>
+                            <li>Gestión de prioridades</li>
+                            <li>Cumplimiento de deadlines</li>
+                        </ul>
+                    </div>
+
+                    <div class="soft-skill-card">
+                        <div class="soft-skill-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>Aprendizaje Continuo</h3>
+                        <p>Adaptación rápida a nuevas tecnologías y herramientas.</p>
+                        <ul class="soft-skill-list">
+                            <li>Autodidacta</li>
+                            <li>Investigación tecnológica</li>
+                            <li>Adaptabilidad</li>
+                        </ul>
+                    </div>
+
+                    <div class="soft-skill-card">
+                        <div class="soft-skill-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>Relaciones Interpersonales</h3>
+                        <p>Establecimiento de relaciones profesionales sólidas y productivas.</p>
+                        <ul class="soft-skill-list">
+                            <li>Empatía profesional</li>
+                            <li>Networking</li>
+                            <li>Gestión de stakeholders</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Contacto -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>¡Hablemos!</h3>
+                    <p>¿Tienes un proyecto en mente? Me encantaría escuchar tus ideas y ayudarte a hacerlas realidad.</p>
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <span>jorge.acedo.oliver@gmail.com</span>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-phone"></i>
+                            <span>+34 662 023 081</span>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Cádiz, España</span>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="https://www.linkedin.com/in/jorgeacedooliver/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="https://github.com/jorgeoliver7" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="https://www.instagram.com/jorgeeoliveer/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Tu nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Tu email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Asunto" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" placeholder="Tu mensaje" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Jorge Acedo. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
