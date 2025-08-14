@@ -72,8 +72,11 @@
             <div class="hero-image">
                 <div class="profile-section">
                     <div class="profile-photo">
-                        <img src="profile.jpg" alt="Jorge Acedo" class="profile-avatar">
+                        <img src="profile.jpg?v=1" alt="Jorge Acedo" class="profile-avatar" onerror="this.style.display='none'; this.nextElementSibling.nextElementSibling.style.display='flex';">
                         <div class="profile-glow"></div>
+                        <div class="photo-placeholder" style="display: none; align-items: center; justify-content: center; background: #667eea; color: white; border-radius: 50%; width: 200px; height: 200px; font-size: 14px; text-align: center; padding: 20px; box-sizing: border-box;">
+                            📷<br>Sube tu foto<br>reemplazando<br>profile.jpg
+                        </div>
                     </div>
                     <div class="tech-stack">
                         <div class="tech-item">
@@ -129,7 +132,7 @@
                             <span class="stat-label">Años de Experiencia</span>
                         </div>
                         <div class="stat">
-                            <span class="stat-number">3+</span>
+                            <span class="stat-number">5+</span>
                             <span class="stat-label">Proyectos Completados</span>
                         </div>
                         <div class="stat">
