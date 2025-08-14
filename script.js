@@ -189,3 +189,106 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style);
+
+// Inicializar EmailJS
+(function() {
+    emailjs.init({
+        publicKey: "kyFzQFk61mcbcSSrQ", // Tu Public Key real
+    });
+})();
+
+// Manejar envío del formulario de contacto
+document.addEventListener('DOMContentLoaded', function() {
+    const contactForm = document.querySelector('.contact-form');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Mostrar estado de carga
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
+            
+            // Configurar parámetros del template
+            const templateParams = {
+                from_name: this.name.value,
+                from_email: this.email.value,
+                subject: this.subject.value,
+                message: this.message.value,
+                to_name: 'Jorge Acedo', // Tu nombre
+            };
+            
+            // Enviar email usando EmailJS
+            emailjs.send(
+                'service_l1jb4ws', // Tu Service ID real
+                'template_2ks43wf', // Tu Template ID real
+                templateParams
+            )
+            .then(function(response) {
+                console.log('Email enviado exitosamente:', response);
+                
+                // Mostrar mensaje de éxito
+                showNotification('¡Mensaje enviado exitosamente! Te responderé pronto.', 'success');
+                
+                // Limpiar formulario
+                contactForm.reset();
+                
+            }, function(error) {
+                console.error('Error al enviar email:', error);
+                
+                // Mostrar mensaje de error
+                showNotification('Error al enviar el mensaje. Por favor, inténtalo de nuevo o contáctame directamente.', 'error');
+            })
+            .finally(function() {
+                // Restaurar botón
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            });
+        });
+    }
+});
+
+// Función para mostrar notificaciones
+function showNotification(message, type) {
+    // Crear elemento de notificación
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.textContent = message;
+    
+    // Estilos para la notificación
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 1rem 1.5rem;
+        border-radius: 10px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        max-width: 400px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+        ${type === 'success' ? 'background: linear-gradient(135deg, #4CAF50, #45a049);' : 'background: linear-gradient(135deg, #f44336, #da190b);'}
+    `;
+    
+    // Agregar al DOM
+    document.body.appendChild(notification);
+    
+    // Animar entrada
+    setTimeout(() => {
+        notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Remover después de 5 segundos
+    setTimeout(() => {
+        notification.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 5000);
+}
