@@ -26,6 +26,12 @@
                     <a href="#projects" class="nav-link">Proyectos</a>
                 </li>
                 <li class="nav-item">
+                    <a href="#metrics" class="nav-link">Métricas</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#experience" class="nav-link">Experiencia</a>
+                </li>
+                <li class="nav-item">
                     <a href="#skills" class="nav-link">Habilidades</a>
                 </li>
                 <li class="nav-item">
@@ -64,24 +70,37 @@
                 </div>
             </div>
             <div class="hero-image">
-                <div class="profile-card">
-                    <div class="profile-img">
-                        <img src="profile.svg" alt="Jorge Acedo" class="profile-avatar">
+                <div class="profile-section">
+                    <div class="profile-photo">
+                        <img src="profile.jpg" alt="Jorge Acedo" class="profile-avatar">
+                        <div class="profile-glow"></div>
                     </div>
-                    <div class="floating-elements">
-                        <div class="floating-icon" style="--delay: 0s">
+                    <div class="tech-stack">
+                        <div class="tech-item">
                             <i class="fab fa-java"></i>
+                            <span>Java</span>
                         </div>
-                        <div class="floating-icon" style="--delay: 1.5s">
+                        <div class="tech-item">
                             <i class="fab fa-react"></i>
+                            <span>React</span>
                         </div>
-                        <div class="floating-icon" style="--delay: 3s">
-                            <i class="fab fa-js-square"></i>
-                        </div>
-                        <div class="floating-icon" style="--delay: 4.5s">
-                            <i class="fab fa-docker"></i>
-                        </div>
-                    </div>
+                        <div class="tech-item">
+                             <i class="fab fa-js-square"></i>
+                             <span>JavaScript</span>
+                         </div>
+                         <div class="tech-item">
+                             <i class="fab fa-html5"></i>
+                             <span>HTML</span>
+                         </div>
+                         <div class="tech-item">
+                             <i class="fab fa-css3-alt"></i>
+                             <span>CSS</span>
+                         </div>
+                         <div class="tech-item">
+                             <i class="fas fa-robot"></i>
+                             <span>AI Prompting</span>
+                         </div>
+                     </div>
                 </div>
             </div>
         </div>
@@ -134,18 +153,36 @@
     <section id="projects" class="projects">
         <div class="container">
             <h2 class="section-title">Mis Proyectos</h2>
+            
+            <!-- Filtros de Proyectos -->
+            <div class="project-filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="fullstack">Full Stack</button>
+                <button class="filter-btn" data-filter="frontend">Frontend</button>
+                <button class="filter-btn" data-filter="backend">Backend</button>
+                <button class="filter-btn" data-filter="ai">IA/ML</button>
+            </div>
+            
             <div class="projects-grid">
-                <div class="project-card">
+                <div class="project-card" data-category="fullstack">
                     <div class="project-image">
-                        <i class="fas fa-car"></i>
-                    </div>
+                         <i class="fas fa-car"></i>
+                     </div>
                     <div class="project-content">
-                        <h3>iRacing Setup Assistant</h3>
+                        <div class="project-header">
+                             <h3>iRacing Setup Assistant</h3>
+                         </div>
                         <p>Aplicación web completa para ayudar a usuarios de iRacing a encontrar, generar y compartir configuraciones óptimas para sus coches en diferentes circuitos.</p>
+                        <div class="project-features">
+                            <span class="feature">✓ Análisis de telemetría en tiempo real</span>
+                            <span class="feature">✓ Recomendaciones automáticas</span>
+                            <span class="feature">✓ Dashboard interactivo</span>
+                        </div>
                         <div class="project-tech">
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">Node.js</span>
-                            <span class="tech-tag">PostgreSQL</span>
+                            <span class="tech-tag"><i class="fab fa-react"></i> React</span>
+                            <span class="tech-tag"><i class="fab fa-node-js"></i> Node.js</span>
+                            <span class="tech-tag"><i class="fas fa-database"></i> PostgreSQL</span>
+                            <span class="tech-tag"><i class="fas fa-plug"></i> Socket.io</span>
                         </div>
                         <div class="project-links">
                             <a href="https://github.com/jorgeoliver7/iRacingSetupAssistant" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
@@ -154,17 +191,25 @@
                     </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card" data-category="fullstack">
                     <div class="project-image">
-                        <i class="fas fa-flag-checkered"></i>
-                    </div>
+                         <i class="fas fa-flag-checkered"></i>
+                     </div>
                     <div class="project-content">
-                        <h3>Racing Team Management</h3>
+                        <div class="project-header">
+                             <h3>Racing Team Management</h3>
+                         </div>
                         <p>Sistema integral de gestión para equipos de racing que permite administrar vehículos, miembros del equipo, eventos, mantenimiento y logística.</p>
+                        <div class="project-features">
+                            <span class="feature">✓ Gestión completa de equipos</span>
+                            <span class="feature">✓ Reportes automatizados</span>
+                            <span class="feature">✓ API REST completa</span>
+                        </div>
                         <div class="project-tech">
-                            <span class="tech-tag">Java Spring Boot</span>
-                            <span class="tech-tag">React</span>
-                            <span class="tech-tag">PostgreSQL</span>
+                            <span class="tech-tag"><i class="fab fa-java"></i> Java Spring Boot</span>
+                            <span class="tech-tag"><i class="fab fa-react"></i> React</span>
+                            <span class="tech-tag"><i class="fas fa-database"></i> PostgreSQL</span>
+                            <span class="tech-tag"><i class="fab fa-docker"></i> Docker</span>
                         </div>
                         <div class="project-links">
                             <a href="https://github.com/jorgeoliver7/RacingTeamManagement" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
@@ -173,21 +218,127 @@
                     </div>
                 </div>
 
-                <div class="project-card">
+                <div class="project-card" data-category="ai">
                     <div class="project-image">
-                        <i class="fas fa-trophy"></i>
-                    </div>
+                         <i class="fas fa-trophy"></i>
+                     </div>
                     <div class="project-content">
-                        <h3>F1 Championship Predictor</h3>
+                        <div class="project-header">
+                             <h3>F1 Championship Predictor</h3>
+                         </div>
                         <p>Aplicación de machine learning que predice los resultados del campeonato mundial de Fórmula 1 2025 utilizando análisis de datos históricos y algoritmos predictivos.</p>
+                        <div class="project-features">
+                            <span class="feature">✓ Precisión del 87% en predicciones</span>
+                            <span class="feature">✓ Análisis de 20+ variables</span>
+                            <span class="feature">✓ Visualizaciones interactivas</span>
+                        </div>
                         <div class="project-tech">
-                            <span class="tech-tag">Java</span>
-                            <span class="tech-tag">Machine Learning</span>
-                            <span class="tech-tag">Data Analysis</span>
+                            <span class="tech-tag"><i class="fab fa-java"></i> Java</span>
+                            <span class="tech-tag"><i class="fas fa-brain"></i> Machine Learning</span>
+                            <span class="tech-tag"><i class="fas fa-chart-line"></i> Data Analysis</span>
+                            <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
                         </div>
                         <div class="project-links">
                             <a href="https://github.com/jorgeoliver7/F1ChampionshipPredictor" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
                             <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card" data-category="frontend">
+                    <div class="project-image">
+                         <i class="fas fa-mobile-alt"></i>
+                     </div>
+                    <div class="project-content">
+                        <div class="project-header">
+                             <h3>Portfolio Interactivo</h3>
+                         </div>
+                        <p>Portfolio personal con diseño moderno, animaciones fluidas y modo oscuro. Optimizado para rendimiento y accesibilidad.</p>
+                        <div class="project-features">
+                            <span class="feature">✓ Diseño responsive</span>
+                            <span class="feature">✓ Animaciones CSS avanzadas</span>
+                            <span class="feature">✓ Optimización SEO</span>
+                        </div>
+                        <div class="project-tech">
+                            <span class="tech-tag"><i class="fab fa-html5"></i> HTML5</span>
+                            <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
+                            <span class="tech-tag"><i class="fab fa-js-square"></i> JavaScript</span>
+                            <span class="tech-tag"><i class="fab fa-sass"></i> SASS</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link"><i class="fab fa-github"></i></a>
+                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Métricas y Logros -->
+    <section id="metrics" class="metrics">
+        <div class="container">
+            <h2 class="section-title">Métricas e Impacto</h2>
+            <div class="metrics-grid">
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="metric-content">
+                        <span class="metric-number" data-target="10000">0</span>
+                        <span class="metric-label">Líneas de Código</span>
+                        <span class="metric-description">Escritas en proyectos profesionales</span>
+                    </div>
+                </div>
+                
+                <div class="metric-card">
+                    <div class="metric-icon">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <div class="metric-content">
+                        <span class="metric-number" data-target="15">0</span>
+                        <span class="metric-unit">+</span>
+                        <span class="metric-label">Repositorios</span>
+                        <span class="metric-description">Proyectos en GitHub</span>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Sección Experiencia Profesional -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2 class="section-title">Experiencia Profesional</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-marker">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3>Desarrollador de Software</h3>
+                            <span class="company">GrupoOro</span>
+                            <span class="period">2023 (6 meses)</span>
+                        </div>
+                        <div class="timeline-body">
+                            <p>Desarrollo integral de aplicaciones web, desde la escritura de código hasta el diseño de interfaces de usuario. Responsable del testing, diseño UX/UI y gestión de backups del sistema.</p>
+                            <ul class="achievements">
+                                <li>Desarrollo y mantenimiento de aplicaciones web completas</li>
+                                <li>Testing exhaustivo de aplicaciones web para garantizar calidad</li>
+                                <li>Diseño de interfaces UX/UI intuitivas y modernas</li>
+                                <li>Gestión y mantenimiento de backups del sistema</li>
+                                <li>Implementación de soluciones con Canvas para gráficos interactivos</li>
+                            </ul>
+                            <div class="tech-used">
+                                <span class="tech-tag">JavaScript</span>
+                                <span class="tech-tag">HTML</span>
+                                <span class="tech-tag">CSS</span>
+                                <span class="tech-tag">Python</span>
+                                <span class="tech-tag">Canvas</span>
+                            </div>
                         </div>
                     </div>
                 </div>
