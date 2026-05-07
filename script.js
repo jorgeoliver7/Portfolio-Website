@@ -1,248 +1,184 @@
-// Funcionalidad del modo noche
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+
+    // ── Tema claro/oscuro ──────────────────────────────────────────────────────
     const themeToggle = document.getElementById('theme-toggle');
     const body = document.body;
-    
-    // Verificar si hay un tema guardado en localStorage
+
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
         body.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
     }
-    
-    // Función para cambiar el tema
-    function toggleTheme() {
-        const currentTheme = body.getAttribute('data-theme');
-        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-        
-        body.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+
+    function updateThemeIcon(theme) {
+        if (!themeToggle) return;
+        const icon = themeToggle.querySelector('i');
+        if (icon) {
+            icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+        }
     }
-    
-    // Event listener para el botón de toggle
+
     if (themeToggle) {
-        themeToggle.addEventListener('click', toggleTheme);
+        themeToggle.addEventListener('click', function () {
+            const current = body.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', next);
+            localStorage.setItem('theme', next);
+            updateThemeIcon(next);
+        });
     }
-    
-    // Smooth scrolling para los enlaces de navegación
-    const navLinks = document.querySelectorAll('a[href^="#"]');
-    navLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
+
+    // ── Menú hamburguesa ──────────────────────────────────────────────────────
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', function () {
+            navMenu.classList.toggle('active');
+            hamburger.classList.toggle('active');
+        });
+
+        navMenu.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function () {
+                navMenu.classList.remove('active');
+                hamburger.classList.remove('active');
+            });
+        });
+    }
+
+    // ── Smooth scrolling ──────────────────────────────────────────────────────
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function (e) {
             const targetId = this.getAttribute('href');
-            const targetSection = document.querySelector(targetId);
-            
-            if (targetSection) {
-                targetSection.scrollIntoView({
-                    behavior: 'smooth',
+            if (targetId === '#') return;
+            const target = document.querySelector(targetId);
+            if (target) {
+                e.preventDefault();
+                target.scrollIntoView({
+                    behavior: prefersReducedMotion ? 'auto' : 'smooth',
                     block: 'start'
                 });
             }
         });
     });
-    
-    // Animaciones de scroll
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('animate-in');
-            }
+
+    // ── Animaciones al scroll ─────────────────────────────────────────────────
+    if (!prefersReducedMotion) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry, i) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+        document.querySelectorAll(
+            '.section-title, .project-card, .skill-category, .about-card, .soft-skill-item, .contact-info'
+        ).forEach((el, i) => {
+            el.classList.add('animate-on-scroll');
+            el.style.transitionDelay = `${i * 0.05}s`;
+            observer.observe(el);
         });
-    }, observerOptions);
-    
-    // Elementos que se animan al hacer scroll
-    const animateElements = document.querySelectorAll(
-        '.section-title, .project-card, .skill-category, .about-card, .soft-skill-item, .contact-info'
-    );
-    
-    animateElements.forEach((el, index) => {
-        // Añadir clases de animación con delay escalonado
-        el.classList.add('animate-on-scroll');
-        el.style.transitionDelay = `${index * 0.1}s`;
-        observer.observe(el);
-    });
-    
-    // Animaciones especiales para elementos específicos
-    const leftElements = document.querySelectorAll('.about-text, .hero-content');
-    leftElements.forEach(el => {
-        el.classList.add('animate-slide-left');
-        observer.observe(el);
-    });
-    
-    const rightElements = document.querySelectorAll('.about-image, .hero-image');
-    rightElements.forEach(el => {
-        el.classList.add('animate-slide-right');
-        observer.observe(el);
-    });
-    
-    const scaleElements = document.querySelectorAll('.profile-photo, .stat');
-    scaleElements.forEach(el => {
-        el.classList.add('animate-scale');
-        observer.observe(el);
-    });
-    
-    // Animación de contadores para métricas
+
+        document.querySelectorAll('.about-text, .hero-content').forEach(el => {
+            el.classList.add('animate-slide-left');
+            observer.observe(el);
+        });
+
+        document.querySelectorAll('.about-image, .hero-image').forEach(el => {
+            el.classList.add('animate-slide-right');
+            observer.observe(el);
+        });
+
+        document.querySelectorAll('.profile-photo, .stat').forEach(el => {
+            el.classList.add('animate-scale');
+            observer.observe(el);
+        });
+    }
+
+    // ── Contadores animados (métricas) ────────────────────────────────────────
     const metricNumbers = document.querySelectorAll('.metric-number');
     const metricsObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                const target = parseInt(entry.target.getAttribute('data-target'));
-                animateCounter(entry.target, target);
+                const target = parseInt(entry.target.getAttribute('data-target'), 10);
+                if (!isNaN(target)) animateCounter(entry.target, target);
                 metricsObserver.unobserve(entry.target);
             }
         });
     }, { threshold: 0.5 });
-    
-    metricNumbers.forEach(number => {
-        metricsObserver.observe(number);
-    });
-});
 
-// Función para animar contadores
-function animateCounter(element, target) {
-    let current = 0;
-    const increment = target / 100;
-    const duration = 2000; // 2 segundos
-    const stepTime = duration / 100;
-    
-    const timer = setInterval(() => {
-        current += increment;
-        if (current >= target) {
-            current = target;
-            clearInterval(timer);
-        }
-        
-        // Formatear números grandes
-        let displayValue;
-        if (target >= 1000) {
-            displayValue = Math.floor(current).toLocaleString();
-        } else {
-            displayValue = Math.floor(current);
-        }
-        
-        element.textContent = displayValue;
-    }, stepTime);
-}
+    metricNumbers.forEach(el => metricsObserver.observe(el));
 
-// Filtros de proyectos
-document.addEventListener('DOMContentLoaded', () => {
+    // ── Filtros de proyectos ──────────────────────────────────────────────────
     const filterButtons = document.querySelectorAll('.filter-btn');
     const projectCards = document.querySelectorAll('.project-card');
-    
+
     filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remover clase active de todos los botones
+        button.addEventListener('click', function () {
             filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Añadir clase active al botón clickeado
-            button.classList.add('active');
-            
-            const filterValue = button.getAttribute('data-filter');
-            
+            this.classList.add('active');
+
+            const filter = this.getAttribute('data-filter');
+
             projectCards.forEach(card => {
-                if (filterValue === 'all') {
+                const match = filter === 'all' || card.getAttribute('data-category') === filter;
+                if (match) {
                     card.style.display = 'block';
-                    card.style.animation = 'fadeInUp 0.5s ease forwards';
+                    card.classList.remove('card-hidden');
                 } else {
-                    const cardCategory = card.getAttribute('data-category');
-                    if (cardCategory === filterValue) {
-                        card.style.display = 'block';
-                        card.style.animation = 'fadeInUp 0.5s ease forwards';
-                    } else {
-                        card.style.animation = 'fadeOut 0.3s ease forwards';
-                        setTimeout(() => {
-                            card.style.display = 'none';
-                        }, 300);
-                    }
+                    card.classList.add('card-hidden');
+                    setTimeout(() => {
+                        if (card.classList.contains('card-hidden')) card.style.display = 'none';
+                    }, 300);
                 }
             });
         });
     });
-});
 
-// Animaciones para filtros
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    @keyframes fadeOut {
-        from {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        to {
-            opacity: 0;
-            transform: translateY(-20px);
-        }
-    }
-`;
-document.head.appendChild(style);
+    // ── Formulario de contacto ────────────────────────────────────────────────
+    emailjs.init({ publicKey: "kyFzQFk61mcbcSSrQ" });
 
-// Inicializar EmailJS
-(function() {
-    emailjs.init({
-        publicKey: "kyFzQFk61mcbcSSrQ", // Tu Public Key real
-    });
-})();
-
-// Manejar envío del formulario de contacto
-document.addEventListener('DOMContentLoaded', function() {
     const contactForm = document.querySelector('.contact-form');
-    
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
+        contactForm.addEventListener('submit', function (e) {
             e.preventDefault();
-            
-            // Mostrar estado de carga
+
+            const name = this.name.value.trim();
+            const email = this.email.value.trim();
+            const subject = this.subject.value.trim();
+            const message = this.message.value.trim();
+
+            if (!name || !email || !subject || !message) {
+                showNotification('Por favor, rellena todos los campos.', 'error');
+                return;
+            }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                showNotification('Introduce un email válido.', 'error');
+                return;
+            }
+
             const submitBtn = this.querySelector('button[type="submit"]');
             const originalText = submitBtn.textContent;
             submitBtn.textContent = 'Enviando...';
             submitBtn.disabled = true;
-            
-            // Configurar parámetros del template
-            const templateParams = {
-                from_name: this.name.value,
-                from_email: this.email.value,
-                subject: this.subject.value,
-                message: this.message.value,
-                to_name: 'Jorge Acedo', // Tu nombre
-            };
-            
-            // Enviar email usando EmailJS
+
             emailjs.send(
-                'service_l1jb4ws', // Tu Service ID real
-                'template_2ks43wf', // Tu Template ID real
-                templateParams
+                'service_l1jb4ws',
+                'template_2ks43wf',
+                { from_name: name, from_email: email, subject, message, to_name: 'Jorge Acedo' }
             )
-            .then(function(response) {
-                console.log('Email enviado exitosamente:', response);
-                
-                // Mostrar mensaje de éxito
-                showNotification('¡Mensaje enviado exitosamente! Te responderé pronto.', 'success');
-                
-                // Limpiar formulario
+            .then(() => {
+                showNotification('¡Mensaje enviado! Te responderé pronto.', 'success');
                 contactForm.reset();
-                
-            }, function(error) {
-                console.error('Error al enviar email:', error);
-                
-                // Mostrar mensaje de error
-                showNotification('Error al enviar el mensaje. Por favor, inténtalo de nuevo o contáctame directamente.', 'error');
             })
-            .finally(function() {
-                // Restaurar botón
+            .catch(() => {
+                showNotification('Error al enviar. Contáctame directamente por email.', 'error');
+            })
+            .finally(() => {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
             });
@@ -250,45 +186,39 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Función para mostrar notificaciones
+// ── Helpers ────────────────────────────────────────────────────────────────────
+
+function animateCounter(element, target) {
+    const duration = 2000;
+    const steps = 100;
+    const increment = target / steps;
+    const stepTime = duration / steps;
+    let current = 0;
+
+    const timer = setInterval(() => {
+        current += increment;
+        if (current >= target) {
+            current = target;
+            clearInterval(timer);
+        }
+        element.textContent = target >= 1000
+            ? Math.floor(current).toLocaleString()
+            : Math.floor(current);
+    }, stepTime);
+}
+
 function showNotification(message, type) {
-    // Crear elemento de notificación
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
-    
-    // Estilos para la notificación
-    notification.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        padding: 1rem 1.5rem;
-        border-radius: 10px;
-        color: white;
-        font-weight: 500;
-        z-index: 10000;
-        max-width: 400px;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-        ${type === 'success' ? 'background: linear-gradient(135deg, #4CAF50, #45a049);' : 'background: linear-gradient(135deg, #f44336, #da190b);'}
-    `;
-    
-    // Agregar al DOM
     document.body.appendChild(notification);
-    
-    // Animar entrada
+
+    requestAnimationFrame(() => {
+        notification.classList.add('notification-visible');
+    });
+
     setTimeout(() => {
-        notification.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Remover después de 5 segundos
-    setTimeout(() => {
-        notification.style.transform = 'translateX(100%)';
-        setTimeout(() => {
-            if (notification.parentNode) {
-                notification.parentNode.removeChild(notification);
-            }
-        }, 300);
+        notification.classList.remove('notification-visible');
+        setTimeout(() => notification.remove(), 300);
     }, 5000);
 }

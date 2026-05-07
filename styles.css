@@ -1634,8 +1634,93 @@ section {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .education-period {
         white-space: normal;
+    }
+}
+
+/* About - dos tarjetas en columna */
+.about-image {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Badge "En curso" para formación activa */
+.badge-active {
+    display: inline-block;
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+    color: #1a202c;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 20px;
+    vertical-align: middle;
+    margin-left: 8px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+/* Educación activa destacada */
+.education-item--active {
+    border-left: 4px solid var(--primary-color);
+    background: linear-gradient(135deg, var(--white) 0%, rgba(102, 126, 234, 0.05) 100%);
+}
+
+/* Notificaciones del formulario */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    z-index: 10000;
+    max-width: 400px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transform: translateX(110%);
+    transition: transform 0.3s ease;
+}
+
+.notification-visible {
+    transform: translateX(0);
+}
+
+.notification-success {
+    background: linear-gradient(135deg, #4caf50, #45a049);
+}
+
+.notification-error {
+    background: linear-gradient(135deg, #f44336, #da190b);
+}
+
+/* Animación de salida de tarjetas en filtros */
+@keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(-20px); }
+}
+
+.card-hidden {
+    animation: fadeOut 0.3s ease forwards;
+}
+
+/* Accesibilidad: sin animaciones si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    .animate-on-scroll,
+    .animate-slide-left,
+    .animate-slide-right,
+    .animate-scale {
+        opacity: 1;
+        transform: none;
     }
 }
