@@ -1706,6 +1706,52 @@ section {
     animation: fadeOut 0.3s ease forwards;
 }
 
+/* Badge disponibilidad */
+.availability-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 1.2rem;
+    backdrop-filter: blur(10px);
+}
+
+.availability-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #43e97b;
+    box-shadow: 0 0 0 3px rgba(67, 233, 123, 0.3);
+    animation: pulse-dot 2s infinite;
+    flex-shrink: 0;
+}
+
+@keyframes pulse-dot {
+    0%, 100% { box-shadow: 0 0 0 3px rgba(67, 233, 123, 0.3); }
+    50%       { box-shadow: 0 0 0 6px rgba(67, 233, 123, 0.1); }
+}
+
+/* LinkedIn en navbar */
+.nav-linkedin {
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    margin-left: 0.75rem;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.nav-linkedin:hover {
+    color: #0077b5;
+    transform: scale(1.15);
+}
+
 /* Accesibilidad: sin animaciones si el usuario lo prefiere */
 @media (prefers-reduced-motion: reduce) {
     *,
