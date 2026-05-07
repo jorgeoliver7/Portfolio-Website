@@ -1,987 +1,234 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jorge Acedo - Portfolio | Desarrollador de Software & Analista de Datos</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jorge Acedo · Software Developer & Data Analyst</title>
 
-    <!-- SEO Meta Tags -->
-    <meta name="description" content="Portfolio de Jorge Acedo, desarrollador de software y analista de datos especializado en React, Java, Python y análisis de datos. Perfil híbrido con experiencia en desarrollo web y ciencia de datos.">
-    <meta name="keywords" content="Jorge Acedo, desarrollador, software, analista de datos, React, Java, JavaScript, Python, data analysis, IBM, portfolio, programador, Cádiz, España">
-    <meta name="author" content="Jorge Acedo">
-    <meta name="robots" content="index, follow">
+  <!-- SEO -->
+  <meta name="description" content="Portfolio de Jorge Acedo, desarrollador de software y analista de datos especializado en React, Java, Python y análisis de datos. Perfil híbrido.">
+  <meta name="keywords" content="Jorge Acedo, desarrollador, software, analista de datos, React, Java, JavaScript, Python, data analysis, IBM, portfolio, Cádiz, España">
+  <meta name="author" content="Jorge Acedo">
+  <meta name="robots" content="index, follow">
 
-    <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="Jorge Acedo - Portfolio | Desarrollador de Software & Analista de Datos">
-    <meta property="og:description" content="Portfolio de Jorge Acedo, desarrollador de software y analista de datos especializado en React, Java, Python y soluciones data-driven.">
-    <meta property="og:image" content="./profile.jpg">
-    <meta property="og:url" content="https://jorgeoliver7.github.io/Portfolio-Website/">
-    <meta property="og:type" content="website">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Jorge Acedo · Software Developer & Data Analyst">
+  <meta property="og:description" content="Perfil híbrido entre desarrollo de software y análisis de datos. React, Java, Python, SQL.">
+  <meta property="og:image" content="./jorge.jpg">
+  <meta property="og:url" content="https://jorgeoliver7.github.io/Portfolio-Website/">
+  <meta property="og:type" content="website">
 
-    <!-- Twitter Card Meta Tags -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Jorge Acedo - Portfolio | Desarrollador de Software & Analista de Datos">
-    <meta name="twitter:description" content="Portfolio de Jorge Acedo, desarrollador de software y analista de datos especializado en React, Java, Python y soluciones data-driven.">
-    <meta name="twitter:image" content="./profile.jpg">
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Jorge Acedo · Software Developer & Data Analyst">
+  <meta name="twitter:description" content="Perfil híbrido entre desarrollo de software y análisis de datos.">
+  <meta name="twitter:image" content="./jorge.jpg">
 
+  <!-- Prevent flash of wrong theme -->
+  <script>
+    (function () {
+      var t = localStorage.getItem('a-theme') || 'dark';
+      document.documentElement.style.background = t === 'dark' ? '#0e1116' : '#f3efe6';
+    })();
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Navegación -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span>Jorge Acedo</span>
-            </div>
-            <ul class="nav-menu">
-                <li class="nav-item">
-                    <a href="#home" class="nav-link">Inicio</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#about" class="nav-link">Sobre mí</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#projects" class="nav-link">Proyectos</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#experience" class="nav-link">Experiencia</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#skills" class="nav-link">Habilidades</a>
-                </li>
-                <li class="nav-item">
-                    <a href="#contact" class="nav-link">Contacto</a>
-                </li>
-            </ul>
-            <a href="https://www.linkedin.com/in/jorgeacedooliver/" target="_blank" class="nav-linkedin" aria-label="LinkedIn">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <button class="theme-toggle" id="theme-toggle" aria-label="Cambiar tema">
-                <i class="fas fa-moon"></i>
-            </button>
-            <div class="hamburger">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-            </div>
+<div id="app" class="a-root">
+
+  <!-- NAV -->
+  <nav class="a-nav">
+    <div class="a-nav-brand">
+      <span class="a-nav-mark">JA</span>
+      <span class="a-nav-title">Jorge Acedo</span>
+      <span class="a-mono a-nav-sub">/ portfolio</span>
+    </div>
+    <ul class="a-nav-links">
+      <li><a href="#about">Sobre mí</a></li>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#experience">Experiencia</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+    <div class="a-nav-actions">
+      <a class="a-nav-linkedin" href="https://www.linkedin.com/in/jorgeacedooliver/" target="_blank" rel="noopener">in / LinkedIn</a>
+      <button class="a-nav-toggle" id="theme-toggle" aria-label="Cambiar tema">◐</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section id="home" class="a-hero">
+    <div class="a-hero-frame">
+      <div class="a-hero-meta">
+        <span class="a-mono">PORTFOLIO / 2026</span>
+        <span class="a-mono">CÁDIZ · 36.5°N 6.3°W</span>
+        <span class="a-hero-meta-status a-mono"><i class="a-pulse"></i> ABIERTO A OPORTUNIDADES</span>
+      </div>
+
+      <div class="a-hero-main">
+        <div class="a-hero-portrait">
+          <div class="a-portrait-frame">
+            <img src="jorge.jpg" alt="Jorge Acedo" loading="eager">
+          </div>
         </div>
-    </nav>
-
-    <!-- Sección Hero -->
-    <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="availability-badge">
-                    <span class="availability-dot"></span>
-                    Abierto a oportunidades
-                </div>
-                <h1 class="hero-title">
-                    Hola, soy Jorge Acedo
-                </h1>
-                <p class="hero-subtitle">Desarrollador de Software & Analista de Datos</p>
-                <p class="hero-description">
-                    Perfil híbrido entre desarrollo de software y análisis de datos.
-                    Construyo aplicaciones modernas y extraigo valor de los datos para tomar decisiones más inteligentes.
-                </p>
-                <div class="hero-buttons">
-                    <a href="#projects" class="btn btn-primary">Ver Proyectos</a>
-                    <a href="#contact" class="btn btn-secondary">Contactar</a>
-                </div>
-            </div>
-            <div class="hero-image">
-                <div class="profile-section">
-                    <div class="profile-photo">
-                        <img src="profile.jpg?v=1" alt="Jorge Acedo" class="profile-avatar" onerror="this.style.display='none'; this.nextElementSibling.nextElementSibling.style.display='flex';">
-                        <div class="profile-glow"></div>
-                        <div class="photo-placeholder" style="display: none; align-items: center; justify-content: center; background: #667eea; color: white; border-radius: 50%; width: 200px; height: 200px; font-size: 14px; text-align: center; padding: 20px; box-sizing: border-box;">
-                            📷<br>Sube tu foto<br>reemplazando<br>profile.jpg
-                        </div>
-                    </div>
-                    <div class="tech-stack">
-                        <div class="tech-item">
-                            <i class="fab fa-java"></i>
-                            <span>Java</span>
-                        </div>
-                        <div class="tech-item">
-                            <i class="fab fa-react"></i>
-                            <span>React</span>
-                        </div>
-                        <div class="tech-item">
-                             <i class="fab fa-js-square"></i>
-                             <span>JavaScript</span>
-                         </div>
-                         <div class="tech-item">
-                             <i class="fab fa-html5"></i>
-                             <span>HTML</span>
-                         </div>
-                         <div class="tech-item">
-                             <i class="fab fa-css3-alt"></i>
-                             <span>CSS</span>
-                         </div>
-                         <div class="tech-item">
-                             <i class="fas fa-robot"></i>
-                             <span>AI Tools</span>
-                         </div>
-                         <div class="tech-item">
-                             <i class="fab fa-python"></i>
-                             <span>Python</span>
-                         </div>
-                         <div class="tech-item">
-                             <i class="fas fa-chart-bar"></i>
-                             <span>Data Analysis</span>
-                         </div>
-                     </div>
-                </div>
-            </div>
+        <div class="a-hero-text">
+          <div class="a-hero-eyebrow a-mono">◷ Software Engineer × Data Analyst</div>
+          <h1 class="a-hero-title">
+            Construyo <em>productos</em> y leo <em>datos.</em><br>
+            Un perfil que une <span class="a-accent-text">código</span> y <span class="a-accent-text">decisión</span>.
+          </h1>
+          <p class="a-hero-lede">
+            Jorge Acedo. Desarrollo aplicaciones modernas con React, Java y Node, y extraigo insights
+            de datos con Python y SQL. Me muevo con soltura entre el front, el back y el notebook.
+          </p>
+          <div class="a-hero-cta">
+            <a href="#projects" class="a-btn a-btn-primary">Ver proyectos <span class="a-arrow">→</span></a>
+            <a href="#contact" class="a-btn a-btn-ghost">Contactar</a>
+          </div>
         </div>
-    </section>
+      </div>
 
-    <!-- Sección Sobre mí -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">Sobre mí</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>
-                        Soy un profesional con perfil híbrido entre <strong>desarrollo de software</strong> y <strong>análisis de datos</strong>.
-                        Con experiencia en el ciclo completo de desarrollo web y una formación activa en ciencia de datos,
-                        me especializo en construir aplicaciones modernas con React, Java y Node.js, y en extraer
-                        insights accionables de los datos mediante Python y herramientas de análisis.
-                    </p>
-                    <p>
-                        Creo que la combinación de saber programar y entender los datos es una ventaja competitiva real.
-                        Utilizo herramientas de IA para ser más eficiente y escribo código limpio, escalable y mantenible
-                        orientado a resultados de negocio.
-                    </p>
-                    <div class="about-stats">
-                        <div class="stat">
-                            <span class="stat-number">3+</span>
-                            <span class="stat-label">Años de Experiencia</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">6+</span>
-                            <span class="stat-label">Proyectos Completados</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">10+</span>
-                            <span class="stat-label">Tecnologías</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="about-image">
-                    <div class="about-card">
-                        <i class="fas fa-code"></i>
-                        <h3>Desarrollo de Software</h3>
-                        <p>Aplicaciones web modernas con React, Java y Node.js</p>
-                    </div>
-                    <div class="about-card">
-                        <i class="fas fa-chart-bar"></i>
-                        <h3>Análisis de Datos</h3>
-                        <p>Extracción de insights con Python, SQL y visualización</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+      <div class="a-hero-strip" id="hero-strip"></div>
+    </div>
+  </section>
 
-    <!-- Sección Proyectos -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">Mis Proyectos</h2>
-            
-            <!-- Filtros de Proyectos -->
-            <div class="project-filters">
-                <button class="filter-btn active" data-filter="all">Todos</button>
-                <button class="filter-btn" data-filter="fullstack">Full Stack</button>
-                <button class="filter-btn" data-filter="frontend">Frontend</button>
-                <button class="filter-btn" data-filter="backend">Backend</button>
-                <button class="filter-btn" data-filter="datos">Datos & IA</button>
-            </div>
-            
-            <div class="projects-grid">
-                <div class="project-card" data-category="datos">
-                    <div class="project-image">
-                         <i class="fas fa-robot"></i>
-                     </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                             <h3>FindYourPrompt</h3>
-                         </div>
-                        <p>Plataforma inteligente para descubrir, crear y compartir prompts optimizados para IA. Ayuda a usuarios a encontrar los mejores prompts para sus necesidades específicas con herramientas avanzadas de búsqueda y categorización.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ Búsqueda inteligente de prompts</span>
-                            <span class="feature">✓ Categorización automática</span>
-                            <span class="feature">✓ Interfaz moderna y responsive</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-react"></i> React</span>
-                            <span class="tech-tag"><i class="fab fa-js-square"></i> JavaScript</span>
-                            <span class="tech-tag"><i class="fas fa-robot"></i> AI Integration</span>
-                            <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7/findyourprompt" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                            <a href="https://findyourprompt-one.vercel.app/" target="_blank" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                    </div>
-                </div>
+  <!-- SOBRE MÍ -->
+  <section id="about" class="a-section">
+    <header class="a-section-head">
+      <span class="a-mono a-section-num">§ 01</span>
+      <h2 class="a-section-title">Sobre mí</h2>
+      <span class="a-mono a-section-meta">PERFIL HÍBRIDO</span>
+    </header>
+    <div class="a-about-grid">
+      <div class="a-about-text">
+        <p class="a-lede">Soy un profesional con perfil híbrido entre <strong>desarrollo de software</strong> y <strong>análisis de datos</strong>.</p>
+        <p>Construyo aplicaciones modernas con React, Java y Node.js, y extraigo insights accionables con Python, SQL y herramientas de visualización. Creo que la combinación de saber programar y entender los datos es una ventaja competitiva real.</p>
+        <p class="a-quiet">Trabajo con código limpio, escalable y orientado al resultado de negocio. Uso herramientas de IA para ser más rápido y preciso.</p>
+      </div>
+      <div class="a-about-cards">
+        <article class="a-disc-card">
+          <div class="a-disc-card-head">
+            <span class="a-mono">01</span>
+            <span class="a-disc-card-tag">Producto</span>
+          </div>
+          <h3>Desarrollo de Software</h3>
+          <p>Aplicaciones web full-stack: React en el front, Java/Spring y Node en el back, PostgreSQL como capa de datos.</p>
+          <ul>
+            <li>Arquitecturas REST y autenticación JWT</li>
+            <li>UX cuidada, mobile-first</li>
+            <li>Despliegues en Vercel y Docker</li>
+          </ul>
+        </article>
+        <article class="a-disc-card a-disc-card-alt">
+          <div class="a-disc-card-head">
+            <span class="a-mono">02</span>
+            <span class="a-disc-card-tag">Insight</span>
+          </div>
+          <h3>Análisis de Datos</h3>
+          <p>Pipelines de análisis end-to-end: exploración en Jupyter, dashboards en Plotly/Dash, queries SQL avanzadas.</p>
+          <ul>
+            <li>Pandas, NumPy, Matplotlib, Seaborn</li>
+            <li>Window functions, CTEs, KPIs operativos</li>
+            <li>IBM Data Analyst Certificate (2026)</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
 
-                <div class="project-card" data-category="fullstack">
-                    <div class="project-image">
-                         <i class="fas fa-chart-line"></i>
-                     </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                             <h3>Bet4Fun - Sports Betting</h3>
-                         </div>
-                        <p>Sistema inteligente de recomendaciones de apuestas deportivas que analiza estadísticas en tiempo real, cuotas de casas de apuestas y tendencias de equipos para sugerir apuestas simples y combinadas optimizadas.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ Análisis de estadísticas en tiempo real</span>
-                            <span class="feature">✓ Comparación de cuotas entre casas</span>
-                            <span class="feature">✓ Algoritmo de recomendación avanzado</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
-                            <span class="tech-tag"><i class="fas fa-server"></i> Flask</span>
-                            <span class="tech-tag"><i class="fab fa-react"></i> React</span>
-                            <span class="tech-tag"><i class="fas fa-database"></i> API Integration</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7/bet4fun-sports-betting" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                    </div>
-                </div>
+  <!-- PROYECTOS -->
+  <section id="projects" class="a-section">
+    <header class="a-section-head">
+      <span class="a-mono a-section-num">§ 02</span>
+      <h2 class="a-section-title">Proyectos</h2>
+      <span class="a-mono a-section-meta" id="projects-count">12 ENVÍOS</span>
+    </header>
+    <div class="a-filters" id="project-filters"></div>
+    <div class="a-projects-grid" id="projects-grid"></div>
+  </section>
 
-                <div class="project-card" data-category="fullstack">
-                    <div class="project-image">
-                         <i class="fas fa-car"></i>
-                     </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                             <h3>iRacing Setup Assistant</h3>
-                         </div>
-                        <p>Aplicación web completa para ayudar a usuarios de iRacing a encontrar, generar y compartir configuraciones óptimas para sus coches en diferentes circuitos.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ Análisis de telemetría en tiempo real</span>
-                            <span class="feature">✓ Recomendaciones automáticas</span>
-                            <span class="feature">✓ Dashboard interactivo</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-react"></i> React</span>
-                            <span class="tech-tag"><i class="fab fa-node-js"></i> Node.js</span>
-                            <span class="tech-tag"><i class="fas fa-database"></i> PostgreSQL</span>
-                            <span class="tech-tag"><i class="fas fa-plug"></i> Socket.io</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7/iRacingSetupAssistant" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                            <a href="https://i-racing-setup-assistant.vercel.app/" target="_blank" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                    </div>
-                </div>
+  <!-- EXPERIENCIA -->
+  <section id="experience" class="a-section">
+    <header class="a-section-head">
+      <span class="a-mono a-section-num">§ 03</span>
+      <h2 class="a-section-title">Experiencia</h2>
+      <span class="a-mono a-section-meta">CRONOLOGÍA</span>
+    </header>
+    <div class="a-timeline" id="timeline"></div>
+  </section>
 
-                <div class="project-card" data-category="fullstack">
-                    <div class="project-image">
-                         <i class="fas fa-flag-checkered"></i>
-                     </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                             <h3>Racing Team Management</h3>
-                         </div>
-                        <p>Sistema integral de gestión para equipos de racing que permite administrar vehículos, miembros del equipo, eventos, mantenimiento y logística.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ Gestión completa de equipos</span>
-                            <span class="feature">✓ Reportes automatizados</span>
-                            <span class="feature">✓ API REST completa</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-java"></i> Java Spring Boot</span>
-                            <span class="tech-tag"><i class="fab fa-react"></i> React</span>
-                            <span class="tech-tag"><i class="fas fa-database"></i> PostgreSQL</span>
-                            <span class="tech-tag"><i class="fab fa-docker"></i> Docker</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7/RacingTeamManagement" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                    </div>
-                </div>
+  <!-- HABILIDADES -->
+  <section id="skills" class="a-section">
+    <header class="a-section-head">
+      <span class="a-mono a-section-num">§ 04</span>
+      <h2 class="a-section-title">Habilidades</h2>
+      <span class="a-mono a-section-meta">STACK & PESO</span>
+    </header>
+    <div class="a-skills-grid" id="skills-grid"></div>
+  </section>
 
-                <div class="project-card" data-category="datos">
-                    <div class="project-image">
-                         <i class="fas fa-trophy"></i>
-                     </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                             <h3>F1 Championship Predictor</h3>
-                         </div>
-                        <p>Aplicación de machine learning que predice los resultados del campeonato mundial de Fórmula 1 2025 utilizando análisis de datos históricos y algoritmos predictivos.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ Precisión del 87% en predicciones</span>
-                            <span class="feature">✓ Análisis de 20+ variables</span>
-                            <span class="feature">✓ Visualizaciones interactivas</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-java"></i> Java</span>
-                            <span class="tech-tag"><i class="fas fa-brain"></i> Machine Learning</span>
-                            <span class="tech-tag"><i class="fas fa-chart-line"></i> Data Analysis</span>
-                            <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7/F1ChampionshipPredictor" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                    </div>
-                </div>
+  <!-- EDUCACIÓN -->
+  <section id="education" class="a-section">
+    <header class="a-section-head">
+      <span class="a-mono a-section-num">§ 05</span>
+      <h2 class="a-section-title">Educación</h2>
+      <span class="a-mono a-section-meta">FORMACIÓN</span>
+    </header>
+    <div class="a-edu-list" id="edu-list"></div>
+    <div class="a-langs" id="langs"></div>
+  </section>
 
-                <div class="project-card" data-category="frontend">
-                    <div class="project-image">
-                         <i class="fas fa-mobile-alt"></i>
-                     </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                             <h3>Portfolio Interactivo</h3>
-                         </div>
-                        <p>Portfolio personal con diseño moderno, animaciones fluidas y modo oscuro. Optimizado para rendimiento y accesibilidad.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ Diseño responsive</span>
-                            <span class="feature">✓ Animaciones CSS avanzadas</span>
-                            <span class="feature">✓ Optimización SEO</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-html5"></i> HTML5</span>
-                            <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
-                            <span class="tech-tag"><i class="fab fa-js-square"></i> JavaScript</span>
-                            <span class="tech-tag"><i class="fab fa-sass"></i> SASS</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7/Portfolio-Website" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                            <a href="https://jorgeoliver7.github.io/Portfolio-Website/" target="_blank" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" data-category="datos">
-                    <div class="project-image">
-                        <i class="fas fa-tachometer-alt"></i>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h3>Dashboard Operaciones Yard — Amazon FC</h3>
-                        </div>
-                        <p>Dashboard interactivo que monitoriza las operaciones del patio de trailers de un centro de distribución Amazon en tiempo real: Turn Time, OTD, utilización de docks y cola de trailers por turno y hora.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ KPIs con semáforo (OTD, Dwell Time, Turn Time)</span>
-                            <span class="feature">✓ Heatmap de utilización de docks</span>
-                            <span class="feature">✓ Análisis exploratorio en Jupyter Notebook</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
-                            <span class="tech-tag"><i class="fas fa-chart-bar"></i> Pandas</span>
-                            <span class="tech-tag"><i class="fas fa-chart-line"></i> Plotly</span>
-                            <span class="tech-tag"><i class="fas fa-desktop"></i> Dash</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" data-category="datos">
-                    <div class="project-image">
-                        <i class="fas fa-users-cog"></i>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h3>Analizador de Productividad UPH — Amazon FC</h3>
-                        </div>
-                        <p>Herramienta de análisis end-to-end que simula el sistema de inteligencia operativa de Amazon para monitorizar la productividad (UPH) de 50 asociados en 3 procesos y 3 turnos, con motor de alertas automático.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ 8 KPIs calculados: UPH, TOT, calidad, tendencia</span>
-                            <span class="feature">✓ Sistema de alertas: bajo rendimiento sostenido, TOT alto</span>
-                            <span class="feature">✓ Dashboard interactivo con top/bottom performers</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
-                            <span class="tech-tag"><i class="fas fa-chart-bar"></i> Pandas / NumPy</span>
-                            <span class="tech-tag"><i class="fas fa-book"></i> Jupyter</span>
-                            <span class="tech-tag"><i class="fas fa-desktop"></i> Dash</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" data-category="datos">
-                    <div class="project-image">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h3>Asistente de Métricas IA — Amazon FC</h3>
-                        </div>
-                        <p>Chatbot operativo con IA que permite a managers de Amazon hacer preguntas en lenguaje natural sobre métricas del FC: UPH, OTD, alertas activas y rankings de asociados. Usa Claude API con Tool Use para seleccionar y ejecutar las consultas correctas.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ 6 herramientas de datos conectadas a Claude API</span>
-                            <span class="feature">✓ Respuestas en español con semáforos visuales</span>
-                            <span class="feature">✓ Interfaz web chat sin frameworks</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-python"></i> Python / Flask</span>
-                            <span class="tech-tag"><i class="fas fa-robot"></i> Claude API</span>
-                            <span class="tech-tag"><i class="fas fa-chart-bar"></i> Pandas</span>
-                            <span class="tech-tag"><i class="fab fa-js-square"></i> JavaScript</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" data-category="datos">
-                    <div class="project-image">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h3>BBDD SQL — Operaciones Amazon FC</h3>
-                        </div>
-                        <p>Base de datos relacional PostgreSQL que modela las operaciones completas de un centro de distribución Amazon: asociados, turnos, productividad, docks, trailers, inventario y eventos de calidad. Incluye 30 queries SQL de tres niveles de complejidad.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ 8 tablas normalizadas con FK y constraints</span>
-                            <span class="feature">✓ 30 queries: Window functions, CTEs, PERCENTILE</span>
-                            <span class="feature">✓ Generador sintético con seed reproducible</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fas fa-database"></i> PostgreSQL</span>
-                            <span class="tech-tag"><i class="fab fa-python"></i> Python</span>
-                            <span class="tech-tag"><i class="fas fa-plug"></i> psycopg2</span>
-                            <span class="tech-tag"><i class="fas fa-code"></i> SQL Avanzado</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" data-category="frontend">
-                    <div class="project-image">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                            <h3>Prototipo Amazon A to Z — Sync Turnos</h3>
-                        </div>
-                        <p>Prototipo interactivo que simula una nueva funcionalidad para la app Amazon A to Z: exportación automática de turnos al calendario personal del empleado (Google Calendar / Apple Calendar). Diseño fiel a la paleta Amazon.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ Flujo completo de 3 pantallas con animaciones</span>
-                            <span class="feature">✓ Paleta de color y componentes Amazon nativos</span>
-                            <span class="feature">✓ Responsive: móvil real y marco escritorio</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-html5"></i> HTML5</span>
-                            <span class="tech-tag"><i class="fab fa-css3-alt"></i> CSS3</span>
-                            <span class="tech-tag"><i class="fab fa-js-square"></i> JavaScript</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="project-card" data-category="backend">
-                    <div class="project-image">
-                         <i class="fas fa-shopping-cart"></i>
-                     </div>
-                    <div class="project-content">
-                        <div class="project-header">
-                             <h3>TechStore Backend API</h3>
-                         </div>
-                        <p>API REST moderna para e-commerce desarrollada con Spring Boot. Incluye autenticación JWT, gestión de productos, sistema de usuarios y todas las funcionalidades necesarias para una tienda online.</p>
-                        <div class="project-features">
-                            <span class="feature">✓ Autenticación JWT completa</span>
-                            <span class="feature">✓ Sistema de roles (ADMIN/USER)</span>
-                            <span class="feature">✓ API RESTful con paginación</span>
-                        </div>
-                        <div class="project-tech">
-                            <span class="tech-tag"><i class="fab fa-java"></i> Java 17</span>
-                            <span class="tech-tag"><i class="fas fa-leaf"></i> Spring Boot</span>
-                            <span class="tech-tag"><i class="fas fa-shield-alt"></i> Spring Security</span>
-                            <span class="tech-tag"><i class="fas fa-database"></i> H2 Database</span>
-                        </div>
-                        <div class="project-links">
-                            <a href="https://github.com/jorgeoliver7/techstore-backend" target="_blank" class="project-link"><i class="fab fa-github"></i></a>
-                            <a href="#" class="project-link"><i class="fas fa-external-link-alt"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Métricas y Logros -->
-    <section id="metrics" class="metrics">
-        <div class="container">
-            <h2 class="section-title">Métricas e Impacto</h2>
-            <div class="metrics-grid">
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <div class="metric-content">
-                        <span class="metric-number" data-target="3">0</span>
-                        <span class="metric-unit">+</span>
-                        <span class="metric-label">Años de Experiencia</span>
-                        <span class="metric-description">En desarrollo de software</span>
-                    </div>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
-                    <div class="metric-content">
-                        <span class="metric-number" data-target="11">0</span>
-                        <span class="metric-unit">+</span>
-                        <span class="metric-label">Proyectos</span>
-                        <span class="metric-description">Desarrollo y análisis de datos</span>
-                    </div>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-layer-group"></i>
-                    </div>
-                    <div class="metric-content">
-                        <span class="metric-number" data-target="10">0</span>
-                        <span class="metric-unit">+</span>
-                        <span class="metric-label">Tecnologías</span>
-                        <span class="metric-description">Full stack + data stack</span>
-                    </div>
-                </div>
-
-                <div class="metric-card">
-                    <div class="metric-icon">
-                        <i class="fas fa-building"></i>
-                    </div>
-                    <div class="metric-content">
-                        <span class="metric-number" data-target="2">0</span>
-                        <span class="metric-label">Empresas</span>
-                        <span class="metric-description">Amazon · GrupoOro</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Experiencia Profesional -->
-    <section id="experience" class="experience">
-        <div class="container">
-            <h2 class="section-title">Experiencia Profesional</h2>
-            <div class="timeline">
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <i class="fas fa-truck"></i>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h3>Yard Marshall</h3>
-                            <span class="company">Amazon Fulfillment</span>
-                            <span class="period">Noviembre 2025 - Presente</span>
-                        </div>
-                        <div class="timeline-body">
-                            <p>Coordinación y gestión operativa del patio de trailers en un centro de distribución de alto volumen, garantizando la eficiencia del flujo logístico y el cumplimiento de los estándares de seguridad de Amazon.</p>
-                            <ul class="achievements">
-                                <li>Coordinación del movimiento y posicionamiento de trailers en el patio del centro logístico</li>
-                                <li>Garantía del cumplimiento de los protocolos de seguridad y operaciones en entornos de alto rendimiento</li>
-                                <li>Gestión de incidencias operativas con toma de decisiones en tiempo real</li>
-                                <li>Colaboración con equipos de inbound/outbound para optimizar tiempos de carga y descarga</li>
-                            </ul>
-                            <div class="tech-used">
-                                <span class="tech-tag">Logística</span>
-                                <span class="tech-tag">Gestión Operativa</span>
-                                <span class="tech-tag">Seguridad</span>
-                                <span class="tech-tag">Trabajo en Equipo</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="timeline-item">
-                    <div class="timeline-marker">
-                        <i class="fas fa-briefcase"></i>
-                    </div>
-                    <div class="timeline-content">
-                        <div class="timeline-header">
-                            <h3>Desarrollador de Software</h3>
-                            <span class="company">GrupoOro</span>
-                            <span class="period">2023 (6 meses)</span>
-                        </div>
-                        <div class="timeline-body">
-                            <p>Desarrollo integral de aplicaciones web, desde la escritura de código hasta el diseño de interfaces de usuario. Responsable del testing, diseño UX/UI y gestión de backups del sistema.</p>
-                            <ul class="achievements">
-                                <li>Desarrollo y mantenimiento de aplicaciones web completas</li>
-                                <li>Testing exhaustivo de aplicaciones web para garantizar calidad</li>
-                                <li>Diseño de interfaces UX/UI intuitivas y modernas</li>
-                                <li>Gestión y mantenimiento de backups del sistema</li>
-                                <li>Implementación de soluciones con Canvas para gráficos interactivos</li>
-                            </ul>
-                            <div class="tech-used">
-                                <span class="tech-tag">JavaScript</span>
-                                <span class="tech-tag">HTML</span>
-                                <span class="tech-tag">CSS</span>
-                                <span class="tech-tag">Python</span>
-                                <span class="tech-tag">Canvas</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Habilidades -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">Habilidades Técnicas</h2>
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Frontend</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <span class="skill-name">JavaScript</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">React</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">CSS/SASS</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">HTML</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 80%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Backend</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <span class="skill-name">Java</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Spring Boot</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 80%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Node.js</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">PostgreSQL</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 60%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Herramientas</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <span class="skill-name">Git</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">GitHub</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Docker</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 60%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="skill-category">
-                    <h3>Análisis de Datos</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <span class="skill-name">Python (Pandas, NumPy)</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 65%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">SQL</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 70%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Visualización (Matplotlib, Seaborn)</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 60%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Jupyter Notebooks</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 65%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">IBM Cognos Analytics</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 50%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Educación -->
-    <section id="education" class="skills">
-        <div class="container">
-            <h2 class="section-title">Educación</h2>
-            <div class="skills-content">
-                <div class="education-item education-item--active">
-                    <div class="education-header">
-                        <h3>IBM Data Analyst Professional Certificate <span class="badge-active">Completado</span></h3>
-                        <span class="education-period">IBM / Coursera · 2026</span>
-                    </div>
-                    <p class="education-description">Certificación profesional en análisis de datos impartida por IBM. Cubre Python para ciencia de datos, análisis y visualización de datos, SQL, Excel, Pandas, NumPy, Matplotlib, Seaborn e IBM Cognos Analytics.</p>
-                </div>
-                <div class="education-item">
-                    <div class="education-header">
-                        <h3>Grado Superior en Desarrollo de Aplicaciones Web</h3>
-                        <span class="education-period">Universae</span>
-                    </div>
-                    <p class="education-description">Formación especializada en desarrollo web con tecnologías modernas, bases de datos y metodologías de desarrollo.</p>
-                </div>
-                <div class="education-item">
-                    <div class="education-header">
-                        <h3>Estudios de Derecho</h3>
-                        <span class="education-period">Universidad de Cádiz</span>
-                    </div>
-                    <p class="education-description">Formación jurídica que refuerza capacidades analíticas, redacción precisa y resolución estructurada de problemas.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Idiomas -->
-    <section id="languages" class="skills">
-        <div class="container">
-            <h2 class="section-title">Idiomas</h2>
-            <div class="skills-content">
-                <div class="skill-category">
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <span class="skill-name">Español (Nativo)</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 100%"></div>
-                            </div>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-name">Inglés (B2 Cambridge)</span>
-                            <div class="skill-bar">
-                                <div class="skill-progress" style="width: 85%"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Habilidades Blandas -->
-    <section id="soft-skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">Soft Skills</h2>
-            <div class="soft-skills-content">
-                <div class="soft-skills-grid">
-                    <div class="soft-skill-card">
-                        <div class="soft-skill-icon">
-                            <i class="fas fa-comments"></i>
-                        </div>
-                        <h3>Comunicación Efectiva</h3>
-                        <p>Transmisión clara de ideas complejas, tanto oral como escrita.</p>
-                        <ul class="soft-skill-list">
-                            <li>Presentaciones técnicas</li>
-                            <li>Documentación clara</li>
-                            <li>Comunicación cliente-desarrollador</li>
-                        </ul>
-                    </div>
-
-                    <div class="soft-skill-card">
-                        <div class="soft-skill-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h3>Trabajo en Equipo</h3>
-                        <p>Colaboración efectiva en equipos multidisciplinarios con metodologías ágiles.</p>
-                        <ul class="soft-skill-list">
-                            <li>Metodologías ágiles (Scrum)</li>
-                            <li>Colaboración remota</li>
-                            <li>Liderazgo técnico</li>
-                        </ul>
-                    </div>
-
-                    <div class="soft-skill-card">
-                        <div class="soft-skill-icon">
-                            <i class="fas fa-lightbulb"></i>
-                        </div>
-                        <h3>Resolución de Problemas</h3>
-                        <p>Enfoque analítico y creativo para resolver problemas complejos.</p>
-                        <ul class="soft-skill-list">
-                            <li>Pensamiento crítico</li>
-                            <li>Debugging avanzado</li>
-                            <li>Optimización de procesos</li>
-                        </ul>
-                    </div>
-
-                    <div class="soft-skill-card">
-                        <div class="soft-skill-icon">
-                            <i class="fas fa-clock"></i>
-                        </div>
-                        <h3>Gestión del Tiempo</h3>
-                        <p>Priorización de tareas y cumplimiento de deadlines con calidad.</p>
-                        <ul class="soft-skill-list">
-                            <li>Planificación de sprints</li>
-                            <li>Gestión de prioridades</li>
-                            <li>Cumplimiento de deadlines</li>
-                        </ul>
-                    </div>
-
-                    <div class="soft-skill-card">
-                        <div class="soft-skill-icon">
-                            <i class="fas fa-graduation-cap"></i>
-                        </div>
-                        <h3>Aprendizaje Continuo</h3>
-                        <p>Adaptación rápida a nuevas tecnologías y herramientas.</p>
-                        <ul class="soft-skill-list">
-                            <li>Autodidacta</li>
-                            <li>Investigación tecnológica</li>
-                            <li>Adaptabilidad</li>
-                        </ul>
-                    </div>
-
-                    <div class="soft-skill-card">
-                        <div class="soft-skill-icon">
-                            <i class="fas fa-handshake"></i>
-                        </div>
-                        <h3>Relaciones Interpersonales</h3>
-                        <p>Establecimiento de relaciones profesionales sólidas y productivas.</p>
-                        <ul class="soft-skill-list">
-                            <li>Empatía profesional</li>
-                            <li>Networking</li>
-                            <li>Gestión de stakeholders</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Sección Contacto -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Contacto</h2>
-            <div class="contact-content">
-                <div class="contact-info">
-                    <h3>¡Hablemos!</h3>
-                    <p>¿Tienes un proyecto en mente? Me encantaría escuchar tus ideas y ayudarte a hacerlas realidad.</p>
-                    <div class="contact-methods">
-                        <div class="contact-method">
-                            <i class="fas fa-envelope"></i>
-                            <span>jorge.acedo.oliver@gmail.com</span>
-                        </div>
-                        <div class="contact-method">
-                            <i class="fas fa-phone"></i>
-                            <span>+34 662 023 081</span>
-                        </div>
-                        <div class="contact-method">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Cádiz, España</span>
-                        </div>
-                    </div>
-                    <div class="social-links">
-                        <a href="https://www.linkedin.com/in/jorgeacedooliver/" target="_blank" class="social-link"><i class="fab fa-linkedin"></i></a>
-                        <a href="https://github.com/jorgeoliver7" target="_blank" class="social-link"><i class="fab fa-github"></i></a>
-                        <a href="https://www.instagram.com/jorgeeoliveer/" target="_blank" class="social-link"><i class="fab fa-instagram"></i></a>
-                    </div>
-                    
-
-                </div>
-                <form class="contact-form">
-                    <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder="Tu nombre" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" placeholder="Tu email" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="subject" name="subject" placeholder="Asunto" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="message" name="message" placeholder="Tu mensaje" rows="5" required></textarea>
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-info">
-                    <p>&copy; 2026 Jorge Acedo. Todos los derechos reservados.</p>
-                </div>
-                <div class="footer-actions">
-                    <a href="cv.pdf" class="btn btn-download" download="Jorge_Acedo_CV.pdf">
-                        <i class="fas fa-download"></i>
-                        Descargar CV
-                    </a>
-                </div>
-            </div>
-        </div>
+  <!-- CONTACTO -->
+  <section id="contact" class="a-section a-contact">
+    <header class="a-section-head">
+      <span class="a-mono a-section-num">§ 06</span>
+      <h2 class="a-section-title">Contacto</h2>
+      <span class="a-mono a-section-meta">HABLEMOS</span>
+    </header>
+    <div class="a-contact-grid">
+      <div class="a-contact-info">
+        <p class="a-lede">¿Tienes un proyecto, un equipo, o una idea? Escríbeme y lo comentamos.</p>
+        <ul class="a-contact-list" id="contact-list"></ul>
+        <a href="cv.pdf" class="a-btn a-btn-ghost a-cv-btn" download="Jorge_Acedo_CV.pdf">
+          Descargar CV <span class="a-arrow">→</span>
+        </a>
+      </div>
+      <form class="a-contact-form" id="contact-form">
+        <label class="a-field">
+          <span>Nombre</span>
+          <input type="text" name="name" placeholder="Tu nombre" required>
+        </label>
+        <label class="a-field">
+          <span>Email</span>
+          <input type="email" name="email" placeholder="tucorreo@..." required>
+        </label>
+        <label class="a-field">
+          <span>Mensaje</span>
+          <textarea name="message" rows="5" placeholder="Cuéntame en qué puedo ayudar..." required></textarea>
+        </label>
+        <button type="submit" class="a-btn a-btn-primary">
+          Enviar mensaje <span class="a-arrow">→</span>
+        </button>
+      </form>
+    </div>
+    <footer class="a-footer">
+      <span class="a-mono">© 2026 · Jorge Acedo · Cádiz, España</span>
+      <span class="a-mono">v.2 · editorial-data</span>
     </footer>
+  </section>
 
-    <script src="script.js"></script>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="a-toast" role="alert" aria-live="polite"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
