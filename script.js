@@ -175,7 +175,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 showNotification('¡Mensaje enviado! Te responderé pronto.', 'success');
                 contactForm.reset();
             })
-            .catch(() => {
+            .catch((err) => {
+                console.error('EmailJS error:', JSON.stringify(err));
                 showNotification('Error al enviar. Contáctame directamente por email.', 'error');
             })
             .finally(() => {
