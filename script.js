@@ -139,12 +139,10 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
-    // ── Formulario de contacto ────────────────────────────────────────────────
-    emailjs.init({ publicKey: "kyFzQFk61mcbcSSrQ" });
-
+    // ── Formulario de contacto (Web3Forms) ───────────────────────────────────
     const contactForm = document.querySelector('.contact-form');
     if (contactForm) {
-        contactForm.addEventListener('submit', function (e) {
+        contactForm.addEventListener('submit', async function (e) {
             e.preventDefault();
 
             const name = this.name.value.trim();
@@ -166,23 +164,32 @@ document.addEventListener('DOMContentLoaded', function () {
             submitBtn.textContent = 'Enviando...';
             submitBtn.disabled = true;
 
-            emailjs.send(
-                'service_l1jb4ws',
-                'template_2ks43wf',
-                { from_name: name, from_email: email, subject, message, to_name: 'Jorge Acedo' }
-            )
-            .then(() => {
-                showNotification('¡Mensaje enviado! Te responderé pronto.', 'success');
-                contactForm.reset();
-            })
-            .catch((err) => {
-                console.error('EmailJS error:', JSON.stringify(err));
+            try {
+                const res = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        access_key: 'f25ab849-9622-4991-b851-073a127cb833',
+                        name,
+                        email,
+                        subject,
+                        message
+                    })
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showNotification('¡Mensaje enviado! Te responderé pronto.', 'success');
+                    contactForm.reset();
+                } else {
+                    throw new Error(data.message);
+                }
+            } catch (err) {
+                console.error('Web3Forms error:', err);
                 showNotification('Error al enviar. Contáctame directamente por email.', 'error');
-            })
-            .finally(() => {
+            } finally {
                 submitBtn.textContent = originalText;
                 submitBtn.disabled = false;
-            });
+            }
         });
     }
 });
