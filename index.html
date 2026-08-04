@@ -63,7 +63,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=9">
 </head>
 <body>
 <div id="app" class="a-root">
@@ -104,28 +104,42 @@
 
   <!-- HERO -->
   <section id="home" class="a-hero">
-    <div class="a-hero-frame">
+    <div class="a-hero-frame" id="hero-frame">
       <div class="a-hero-meta">
-        <span class="a-mono">PORTFOLIO / 2026</span>
-        <span class="a-mono">CÁDIZ · 36.5°N 6.3°W</span>
-        <span class="a-hero-meta-status a-mono"><i class="a-pulse"></i> ABIERTO A OPORTUNIDADES</span>
+        <span class="a-mono a-hero-meta-item" style="--d:0">PORTFOLIO / 2026</span>
+        <span class="a-mono a-hero-meta-item" style="--d:1">CÁDIZ · 36.5°N 6.3°W</span>
+        <span class="a-hero-meta-status a-mono a-hero-meta-item" style="--d:2"><i class="a-pulse"></i> ABIERTO A OPORTUNIDADES</span>
       </div>
 
       <div class="a-hero-main">
-        <div class="a-hero-portrait">
-          <div class="a-portrait-frame">
+        <div class="a-hero-portrait a-reveal a-reveal-scale" style="--d:0">
+          <div class="a-portrait-frame" id="hero-portrait">
             <img src="jorge.jpg" alt="Jorge Acedo" loading="eager">
           </div>
         </div>
-        <div class="a-hero-text">
-          <div class="a-hero-eyebrow a-mono">◷ Software Developer × Data Analyst</div>
+        <div class="a-hero-text" id="hero-text">
+          <div class="a-hero-eyebrow a-mono">
+            <span class="a-hero-type" id="hero-type"></span>
+          </div>
           <h1 class="a-hero-title">
-            Construyo <em>productos</em> y leo <em>datos.</em><br>
-            Un perfil que une <span class="a-accent-text">código</span> y <span class="a-accent-text">decisión</span>.
+            <span class="a-hero-line" style="--l:0">
+              <span class="a-hero-line-inner">
+                Construyo <em class="a-hero-word" style="--w:0;--l:0">productos</em> y leo <em class="a-hero-word" style="--w:1;--l:0">datos.</em>
+              </span>
+            </span>
+            <span class="a-hero-line" style="--l:1">
+              <span class="a-hero-line-inner">
+                Un perfil que une <span class="a-accent-text a-hero-word" style="--w:2;--l:1">código</span> y <span class="a-accent-text a-hero-word" style="--w:3;--l:1">decisión</span>.
+              </span>
+            </span>
           </h1>
           <p class="a-hero-lede">
-            Jorge Acedo. Desarrollo aplicaciones modernas con React, Java y Node, y extraigo insights
-            de datos con Python y SQL.
+            <span class="a-hero-line a-hero-lede-line" style="--l:0">
+              <span class="a-hero-line-inner">Jorge Acedo. Desarrollo aplicaciones modernas con React, Java y Node,</span>
+            </span>
+            <span class="a-hero-line a-hero-lede-line" style="--l:1">
+              <span class="a-hero-line-inner">y extraigo insights de datos con Python y SQL.</span>
+            </span>
           </p>
           <div class="a-hero-cta">
             <a href="#projects" class="a-btn a-btn-primary">Ver proyectos <span class="a-arrow">→</span></a>

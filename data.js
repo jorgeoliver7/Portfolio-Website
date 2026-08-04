@@ -146,14 +146,14 @@ window.PORTFOLIO_DATA = {
     {
       title: "Grado Superior en Desarrollo de Aplicaciones Web",
       institution: "Universae",
-      year: "—",
+      year: "2024",
       status: "Formación",
       desc: "Desarrollo web con tecnologías modernas, bases de datos y metodologías ágiles.",
     },
     {
       title: "Estudios de Derecho",
       institution: "Universidad de Cádiz",
-      year: "—",
+      year: "2018 — 2023",
       status: "Cursado",
       desc: "Capacidades analíticas, redacción precisa y resolución estructurada de problemas.",
     },
