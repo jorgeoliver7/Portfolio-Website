@@ -6,8 +6,8 @@ Portfolio personal de **Jorge Acedo**, desarrollador de software y analista de d
 
 ## Stack
 
-- HTML5, CSS3 (variables, animaciones, modo oscuro)
-- JavaScript vanilla (IntersectionObserver, EmailJS)
+- HTML5, CSS3 (variables, animaciones, modo oscuro/claro)
+- JavaScript vanilla (IntersectionObserver, Web3Forms)
 - Sin frameworks ni dependencias de build
 
 ## Secciones
@@ -17,9 +17,9 @@ Portfolio personal de **Jorge Acedo**, desarrollador de software y analista de d
 - Métricas — contadores animados
 - Experiencia — Amazon Fulfillment · GrupoOro
 - Habilidades — Frontend, Backend, Herramientas, Análisis de Datos
-- Educación — IBM Data Analyst Certificate (en curso) · DAW · Derecho
+- Educación — IBM Data Analyst Certificate · DAW · Derecho
 - Idiomas y Soft Skills
-- Contacto — formulario con EmailJS
+- Contacto — formulario con Web3Forms (honeypot anti-spam)
 
 ## Proyectos destacados
 
@@ -31,6 +31,28 @@ Portfolio personal de **Jorge Acedo**, desarrollador de software y analista de d
 | TechStore Backend API | Java 17, Spring Boot, Spring Security | GitHub |
 | Bet4Fun | Python, Flask, React | GitHub |
 | Racing Team Management | Java Spring Boot, React, Docker | GitHub |
+
+## Formulario de contacto
+
+El formulario usa [Web3Forms](https://web3forms.com/). La clave de acceso está en `config.js` (no commitear en repos públicos si se rota).
+
+**Protección anti-spam configurada:**
+- Campo honeypot oculto (`botcheck`)
+- Rate limiting client-side (1 envío / 60 s)
+- Restricción de dominio recomendada en el [dashboard de Web3Forms](https://web3forms.com/) → Settings → Allowed Domains: `jorgeoliver7.github.io`
+
+## Metadatos del repositorio (GitHub)
+
+Configura manualmente en GitHub → Settings del repo, o con:
+
+```bash
+gh auth login
+gh repo edit jorgeoliver7/Portfolio-Website \
+  --description "Portfolio personal — Software Developer & Data Analyst" \
+  --homepage "https://jorgeoliver7.github.io/Portfolio-Website/" \
+  --add-topic portfolio --add-topic javascript --add-topic data-analyst \
+  --add-topic vanilla-js --add-topic github-pages
+```
 
 ## Contacto
 

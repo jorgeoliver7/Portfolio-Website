@@ -6,23 +6,49 @@
   <title>Jorge Acedo · Software Developer & Data Analyst</title>
 
   <!-- SEO -->
-  <meta name="description" content="Portfolio de Jorge Acedo, desarrollador de software y analista de datos especializado en React, Java, Python y análisis de datos. Perfil híbrido.">
+  <meta name="description" content="Portfolio de Jorge Acedo — desarrollador full-stack y analista de datos en Cádiz. React, Java, Python, SQL. Perfil híbrido entre código y decisión basada en datos.">
   <meta name="keywords" content="Jorge Acedo, desarrollador, software, analista de datos, React, Java, JavaScript, Python, data analysis, IBM, portfolio, Cádiz, España">
   <meta name="author" content="Jorge Acedo">
   <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://jorgeoliver7.github.io/Portfolio-Website/">
 
   <!-- Open Graph -->
   <meta property="og:title" content="Jorge Acedo · Software Developer & Data Analyst">
   <meta property="og:description" content="Perfil híbrido entre desarrollo de software y análisis de datos. React, Java, Python, SQL.">
-  <meta property="og:image" content="./jorge.jpg">
+  <meta property="og:image" content="https://jorgeoliver7.github.io/Portfolio-Website/jorge.jpg">
   <meta property="og:url" content="https://jorgeoliver7.github.io/Portfolio-Website/">
   <meta property="og:type" content="website">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:site_name" content="Jorge Acedo Portfolio">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Jorge Acedo · Software Developer & Data Analyst">
   <meta name="twitter:description" content="Perfil híbrido entre desarrollo de software y análisis de datos.">
-  <meta name="twitter:image" content="./jorge.jpg">
+  <meta name="twitter:image" content="https://jorgeoliver7.github.io/Portfolio-Website/jorge.jpg">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Jorge Acedo",
+    "jobTitle": "Software Developer & Data Analyst",
+    "url": "https://jorgeoliver7.github.io/Portfolio-Website/",
+    "image": "https://jorgeoliver7.github.io/Portfolio-Website/jorge.jpg",
+    "email": "jorge.acedo.oliver@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Cádiz",
+      "addressCountry": "ES"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/in/jorgeacedooliver/",
+      "https://github.com/jorgeoliver7"
+    ],
+    "knowsAbout": ["React", "Java", "Python", "SQL", "Data Analysis", "Spring Boot", "Node.js"]
+  }
+  </script>
 
   <!-- Prevent flash of wrong theme -->
   <script>
@@ -43,13 +69,13 @@
 <div id="app" class="a-root">
 
   <!-- NAV -->
-  <nav class="a-nav">
+  <nav class="a-nav" aria-label="Navegación principal">
     <div class="a-nav-brand">
       <span class="a-nav-mark">JA</span>
       <span class="a-nav-title">Jorge Acedo</span>
       <span class="a-mono a-nav-sub">/ portfolio</span>
     </div>
-    <ul class="a-nav-links">
+    <ul class="a-nav-links" id="nav-links">
       <li><a href="#about">Sobre mí</a></li>
       <li><a href="#projects">Proyectos</a></li>
       <li><a href="#experience">Experiencia</a></li>
@@ -59,8 +85,22 @@
     <div class="a-nav-actions">
       <a class="a-nav-linkedin" href="https://www.linkedin.com/in/jorgeacedooliver/" target="_blank" rel="noopener">in / LinkedIn</a>
       <button class="a-nav-toggle" id="theme-toggle" aria-label="Cambiar tema">◐</button>
+      <button class="a-nav-menu-btn" id="nav-menu-btn" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav-mobile">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </nav>
+
+  <!-- Mobile nav overlay -->
+  <div class="a-nav-mobile" id="nav-mobile" aria-hidden="true">
+    <ul class="a-nav-mobile-links">
+      <li><a href="#about">Sobre mí</a></li>
+      <li><a href="#projects">Proyectos</a></li>
+      <li><a href="#experience">Experiencia</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contacto</a></li>
+    </ul>
+  </div>
 
   <!-- HERO -->
   <section id="home" class="a-hero">
@@ -200,6 +240,9 @@
         </a>
       </div>
       <form class="a-contact-form" id="contact-form">
+        <!-- Honeypot anti-spam (Web3Forms) -->
+        <input type="checkbox" name="botcheck" class="a-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="text" name="website" class="a-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
         <label class="a-field">
           <span>Nombre</span>
           <input type="text" name="name" placeholder="Tu nombre" required>
@@ -228,6 +271,7 @@
 <!-- Toast -->
 <div id="toast" class="a-toast" role="alert" aria-live="polite"></div>
 
+<script src="config.js"></script>
 <script src="data.js"></script>
 <script src="script.js"></script>
 </body>

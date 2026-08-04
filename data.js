@@ -123,8 +123,8 @@ window.PORTFOLIO_DATA = {
       role: "Yard Marshall",
       company: "Amazon Fulfillment Center",
       period: "Nov 2025 — Presente",
-      desc: "Coordinación operativa del patio de trailers en un FC de alto volumen. Toma de decisiones en tiempo real, cumplimiento de protocolos de seguridad Amazon.",
-      tags: ["Logística", "Gestión Operativa", "Seguridad", "Trabajo en Equipo"],
+      desc: "Coordinación operativa del patio de trailers en un FC de alto volumen. Experiencia directa en el dominio que alimenta mis proyectos de analytics (Turn Time, OTD, dock utilization, productividad UPH). Toma de decisiones en tiempo real con datos operativos.",
+      tags: ["Logística", "KPIs Operativos", "Data-Driven", "Amazon FC"],
     },
     {
       role: "Software Developer",

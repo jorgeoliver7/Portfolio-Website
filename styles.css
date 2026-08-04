@@ -106,6 +106,80 @@ body { margin: 0; padding: 0; }
 }
 .a-nav-toggle:hover { border-color:var(--a-accent); color:var(--a-accent); }
 
+.a-nav-menu-btn {
+  display:none;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+  width:34px; height:34px;
+  border-radius:6px;
+  border:1px solid var(--a-line-strong);
+  background:transparent;
+  cursor:pointer;
+  padding:8px;
+  flex-shrink:0;
+  transition:border-color .18s;
+}
+.a-nav-menu-btn span {
+  display:block;
+  height:2px;
+  background:var(--a-fg);
+  border-radius:1px;
+  transition:transform .2s, opacity .2s;
+}
+.a-nav-menu-btn.is-open span:nth-child(1) { transform:translateY(7px) rotate(45deg); }
+.a-nav-menu-btn.is-open span:nth-child(2) { opacity:0; }
+.a-nav-menu-btn.is-open span:nth-child(3) { transform:translateY(-7px) rotate(-45deg); }
+.a-nav-menu-btn:hover { border-color:var(--a-accent); }
+
+.a-nav-mobile {
+  display:none;
+  position:fixed;
+  inset:57px 0 0 0;
+  z-index:99;
+  background:color-mix(in oklab, var(--a-bg) 95%, transparent);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  padding:24px 20px;
+  border-top:1px solid var(--a-line);
+  transform:translateY(-8px);
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .2s, transform .2s;
+}
+.a-nav-mobile.is-open {
+  transform:translateY(0);
+  opacity:1;
+  pointer-events:auto;
+}
+.a-nav-mobile-links {
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+.a-nav-mobile-links a {
+  display:block;
+  padding:14px 16px;
+  font-size:18px;
+  color:var(--a-fg-soft);
+  border-radius:4px;
+  transition:background .18s, color .18s;
+}
+.a-nav-mobile-links a:hover {
+  background:var(--a-bg-2);
+  color:var(--a-fg);
+}
+body.a-nav-open { overflow:hidden; }
+
+.a-honeypot {
+  position:absolute;
+  left:-9999px;
+  width:1px;
+  height:1px;
+  opacity:0;
+  pointer-events:none;
+}
+
 /* ── HERO ──────────────────────────────────────────── */
 .a-hero { padding:56px 40px 80px; scroll-margin-top:70px; }
 .a-hero-frame {
@@ -523,6 +597,9 @@ body { margin: 0; padding: 0; }
 @media (max-width:900px) {
   .a-nav { grid-template-columns:1fr auto; padding:12px 20px; gap:12px; }
   .a-nav-links { display:none; }
+  .a-nav-menu-btn { display:flex; }
+  .a-nav-mobile { display:block; }
+  .a-nav-linkedin { display:none; }
   .a-hero, .a-section { padding-left:20px; padding-right:20px; }
   .a-hero { padding-top:32px; padding-bottom:48px; }
   .a-hero-main { grid-template-columns:1fr; gap:32px; text-align:center; }

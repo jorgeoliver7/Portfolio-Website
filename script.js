@@ -1,5 +1,6 @@
 (function () {
   const A = window.PORTFOLIO_DATA;
+  const CFG = window.PORTFOLIO_CONFIG || {};
 
   // ── THEME ─────────────────────────────────────────────────────────────────
   const root    = document.querySelector('.a-root');
@@ -20,6 +21,45 @@
       const next = theme === 'dark' ? 'light' : 'dark';
       localStorage.setItem('a-theme', next);
       applyTheme(next);
+    });
+  }
+
+  // ── MOBILE NAV ────────────────────────────────────────────────────────────
+  const menuBtn   = document.getElementById('nav-menu-btn');
+  const mobileNav = document.getElementById('nav-mobile');
+  let menuOpen = false;
+
+  function setMenuOpen(open) {
+    menuOpen = open;
+    if (menuBtn) {
+      menuBtn.classList.toggle('is-open', open);
+      menuBtn.setAttribute('aria-expanded', String(open));
+      menuBtn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
+    }
+    if (mobileNav) {
+      mobileNav.classList.toggle('is-open', open);
+      mobileNav.setAttribute('aria-hidden', String(!open));
+    }
+    document.body.classList.toggle('a-nav-open', open);
+  }
+
+  if (menuBtn && mobileNav) {
+    menuBtn.addEventListener('click', function () {
+      setMenuOpen(!menuOpen);
+    });
+
+    mobileNav.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        setMenuOpen(false);
+      });
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && menuOpen) setMenuOpen(false);
+    });
+
+    window.addEventListener('resize', function () {
+      if (window.innerWidth > 900 && menuOpen) setMenuOpen(false);
     });
   }
 
@@ -205,9 +245,21 @@
 
   // ── CONTACT FORM (Web3Forms) ──────────────────────────────────────────────
   const form = document.getElementById('contact-form');
+  const RATE_LIMIT_MS = 60000;
+
   if (form) {
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
+
+      const honeypot = form.querySelector('[name="website"]').value.trim();
+      const botcheck = form.querySelector('[name="botcheck"]').checked;
+      if (honeypot || botcheck) return;
+
+      const lastSent = parseInt(sessionStorage.getItem('a-form-sent') || '0', 10);
+      if (Date.now() - lastSent < RATE_LIMIT_MS) {
+        showToast('Espera un momento antes de enviar otro mensaje.', 'error');
+        return;
+      }
 
       const name    = form.querySelector('[name="name"]').value.trim();
       const email   = form.querySelector('[name="email"]').value.trim();
@@ -222,6 +274,12 @@
         return;
       }
 
+      const accessKey = CFG.web3formsKey;
+      if (!accessKey) {
+        showToast('Formulario no configurado. Escríbeme directamente por email.', 'error');
+        return;
+      }
+
       const btn = form.querySelector('button[type="submit"]');
       const saved = btn.innerHTML;
       btn.textContent = 'Enviando…';
@@ -230,15 +288,18 @@
       try {
         const res  = await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
           body: JSON.stringify({
-            access_key: 'f25ab849-9622-4991-b851-073a127cb833',
+            access_key: accessKey,
             name, email, message,
-            subject: `Portfolio · mensaje de ${name}`
+            subject: `Portfolio · mensaje de ${name}`,
+            from_name: 'Portfolio Jorge Acedo',
+            botcheck: false,
           })
         });
         const data = await res.json();
         if (data.success) {
+          sessionStorage.setItem('a-form-sent', String(Date.now()));
           showToast('¡Mensaje enviado! Te responderé pronto.', 'success');
           form.reset();
         } else {
