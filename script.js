@@ -1,5 +1,5 @@
 (function () {
-  const A = window.PORTFOLIO_DATA;
+  const A = window.PORTFOLIO_DATA || {};
   const CFG = window.PORTFOLIO_CONFIG || {};
 
   // ── THEME ─────────────────────────────────────────────────────────────────
@@ -7,14 +7,15 @@
   const toggle  = document.getElementById('theme-toggle');
   let theme     = localStorage.getItem('a-theme') || 'dark';
 
-  applyTheme(theme);
-
   function applyTheme(t) {
     theme = t;
+    if (!root) return;
     root.classList.toggle('a-theme-light', t === 'light');
     document.documentElement.style.background = t === 'dark' ? '#0e1116' : '#f3efe6';
     if (toggle) toggle.textContent = t === 'dark' ? '◐' : '◑';
   }
+
+  applyTheme(theme);
 
   if (toggle) {
     toggle.addEventListener('click', function () {
@@ -28,24 +29,29 @@
 
   // ── MOTION ────────────────────────────────────────────────────────────────
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasIO = typeof IntersectionObserver !== 'undefined';
 
-  const revealObserver = new IntersectionObserver(function (entries) {
+  const revealObserver = hasIO ? new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
       entry.target.classList.add('is-visible');
       revealObserver.unobserve(entry.target);
     });
-  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }) : null;
 
-  const tlObserver = new IntersectionObserver(function (entries) {
+  const tlObserver = hasIO ? new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
       if (!entry.isIntersecting) return;
       entry.target.classList.add('is-visible');
       tlObserver.unobserve(entry.target);
     });
-  }, { threshold: 0.25 });
+  }, { threshold: 0.25 }) : null;
 
   function observeReveals(root) {
+    if (!hasIO) {
+      (root || document).querySelectorAll('.a-reveal, .a-reveal-scale, .a-tl-row, .a-lang-row').forEach(showVisible);
+      return;
+    }
     var scope = root || document;
     scope.querySelectorAll('.a-reveal:not(.is-visible), .a-reveal-scale:not(.is-visible), .a-reveal-left:not(.is-visible)').forEach(function (el) {
       revealObserver.observe(el);
@@ -116,14 +122,22 @@
     }
 
     function startTextSequence() {
-      if (heroText) heroText.classList.add('is-go');
+      if (!heroText || heroText.classList.contains('is-go')) return;
+      heroText.classList.add('is-go');
+      setTimeout(function () {
+        heroText.classList.add('is-ready');
+      }, 2200);
+    }
+
+    function forceHeroTextFallback() {
+      if (frame) frame.classList.add('is-live');
+      if (typeEl && !typeEl.textContent) typeEl.textContent = typeText;
+      if (eyebrow) eyebrow.classList.add('is-typed');
+      startTextSequence();
     }
 
     if (reducedMotion) {
-      if (frame) frame.classList.add('is-live');
-      if (typeEl) typeEl.textContent = typeText;
-      if (eyebrow) eyebrow.classList.add('is-typed');
-      startTextSequence();
+      forceHeroTextFallback();
       return;
     }
 
@@ -146,7 +160,11 @@
         }
         typeChar();
       }, 320);
+    } else {
+      setTimeout(startTextSequence, 400);
     }
+
+    setTimeout(forceHeroTextFallback, 3000);
 
     if (portrait && window.matchMedia('(pointer: fine)').matches) {
       var portraitWrap = portrait.closest('.a-hero-portrait');
@@ -240,7 +258,7 @@
   const barHeights = [42, 28, 58, 36, 70, 52, 44, 64, 48, 74, 60, 52];
   if (heroStrip) {
     heroStrip.innerHTML =
-      A.stats.map(function (s, i) {
+      (A.stats || []).map(function (s, i) {
         return '<div class="a-strip-item a-reveal" style="--d:' + i + '">' +
           '<div class="a-strip-value" data-count="' + s.value + '">0</div>' +
           '<div class="a-strip-label">' + s.label + '</div></div>';
@@ -251,22 +269,30 @@
           barHeights.map(function (h) { return '<span data-h="' + h + '"></span>'; }).join('') +
         '</div></div>';
 
-    var stripObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        if (!entry.isIntersecting) return;
-        entry.target.querySelectorAll('.a-strip-value[data-count]').forEach(function (el) {
-          animateCounter(el, el.dataset.count);
-        });
-        var bars = entry.target.querySelector('.a-mini-bars');
-        if (bars) animateMiniBars(bars, barHeights);
-        entry.target.querySelectorAll('.a-reveal').forEach(showVisible);
-        showVisible(entry.target);
-        stripObserver.unobserve(entry.target);
-      });
-    }, { threshold: 0.3 });
-
     heroStrip.classList.add('a-reveal');
-    stripObserver.observe(heroStrip);
+    if (hasIO) {
+      var stripObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (!entry.isIntersecting) return;
+          entry.target.querySelectorAll('.a-strip-value[data-count]').forEach(function (el) {
+            animateCounter(el, el.dataset.count);
+          });
+          var bars = entry.target.querySelector('.a-mini-bars');
+          if (bars) animateMiniBars(bars, barHeights);
+          entry.target.querySelectorAll('.a-reveal').forEach(showVisible);
+          showVisible(entry.target);
+          stripObserver.unobserve(entry.target);
+        });
+      }, { threshold: 0.3 });
+      stripObserver.observe(heroStrip);
+    } else {
+      heroStrip.querySelectorAll('.a-strip-value[data-count]').forEach(function (el) {
+        animateCounter(el, el.dataset.count);
+      });
+      var bars = heroStrip.querySelector('.a-mini-bars');
+      if (bars) animateMiniBars(bars, barHeights);
+      showVisible(heroStrip);
+    }
   }
 
   // ── PROJECTS ──────────────────────────────────────────────────────────────
@@ -388,16 +414,21 @@
         </div>
       </div>`).join('');
 
-    const barObserver = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.style.width = entry.target.dataset.w + '%';
-          barObserver.unobserve(entry.target);
-        }
+    if (hasIO) {
+      const barObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.width = entry.target.dataset.w + '%';
+            barObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.3 });
+      skillsGrid.querySelectorAll('.a-stack-fill').forEach(el => barObserver.observe(el));
+    } else {
+      skillsGrid.querySelectorAll('.a-stack-fill').forEach(function (el) {
+        el.style.width = el.dataset.w + '%';
       });
-    }, { threshold: 0.3 });
-
-    skillsGrid.querySelectorAll('.a-stack-fill').forEach(el => barObserver.observe(el));
+    }
   }
 
   // ── EDUCATION ─────────────────────────────────────────────────────────────
