@@ -119,6 +119,16 @@ window.PORTFOLIO_DATA = {
       stack: ["Python", "SQL", "Plotly", "Claude API", "PostgreSQL"],
       year: "2026",
     },
+    {
+      id: 9,
+      name: "Portfolio Interactivo",
+      category: "frontend",
+      desc: "Este sitio: diseño editorial, animaciones de entrada, modo oscuro/claro, filtros de proyectos y formulario de contacto con Web3Forms.",
+      stack: ["HTML5", "CSS3", "JavaScript", "GitHub Pages"],
+      repo: "https://github.com/jorgeoliver7/Portfolio-Website",
+      live: "jorgeoliver7.github.io/Portfolio-Website",
+      year: "2026",
+    },
   ],
 
   experience: [
