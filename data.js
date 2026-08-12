@@ -11,7 +11,7 @@ window.PORTFOLIO_DATA = {
 
   stats: [
     { value: "3+", label: "años de experiencia" },
-    { value: "10", label: "proyectos destacados" },
+    { value: "9", label: "proyectos destacados" },
     { value: "10+", label: "tecnologías" },
     { value: "2", label: "perfiles fusionados" },
   ],
