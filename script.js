@@ -333,6 +333,23 @@
     });
   }
 
+  function projectLinks(p) {
+    var links = [];
+    if (p.repo) {
+      links.push(
+        '<a class="a-project-link" href="' + p.repo + '" target="_blank" rel="noopener">repo ↗</a>'
+      );
+    }
+    if (p.live) {
+      links.push(
+        '<a class="a-project-link" href="https://' + p.live + '" target="_blank" rel="noopener">visitar ↗</a>'
+      );
+    }
+    return links.length
+      ? '<div class="a-project-actions">' + links.join('') + '</div>'
+      : '';
+  }
+
   function renderProjects(animate) {
     if (!gridEl) return;
     const list = activeFilter === 'all'
@@ -353,7 +370,7 @@
           '</div>' +
           '<div class="a-project-footer">' +
             '<span class="a-cat a-cat-' + p.category + '">' + catLabel(p.category) + '</span>' +
-            (p.live ? '<a class="a-project-link" href="https://' + p.live + '" target="_blank" rel="noopener">visitar ↗</a>' : '') +
+            projectLinks(p) +
           '</div></article>';
       }).join('');
       gridEl.classList.remove('is-filtering');

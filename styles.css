@@ -656,6 +656,11 @@ html.a-js .a-hero-text.is-go .a-hero-cta {
 }
 .a-cat-fullstack { color:var(--a-accent); }
 .a-cat-data      { color:var(--a-accent-2); }
+.a-project-actions {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
 .a-project-link  { font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--a-fg); }
 .a-project-link:hover { color:var(--a-accent); }
 
