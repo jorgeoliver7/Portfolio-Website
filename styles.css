@@ -655,6 +655,7 @@ html.a-js .a-hero-text.is-go .a-hero-cta {
   color:var(--a-fg-muted);
 }
 .a-cat-fullstack { color:var(--a-accent); }
+.a-cat-frontend  { color:var(--a-accent); }
 .a-cat-data      { color:var(--a-accent-2); }
 .a-project-actions {
   display: flex;
