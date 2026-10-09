@@ -403,22 +403,27 @@
   renderFilters();
   renderProjects();
 
-  // ── EXPERIENCE ────────────────────────────────────────────────────────────
-  const timeline = document.getElementById('timeline');
-  if (timeline) {
-    timeline.innerHTML = A.experience.map(function (e, i) {
-      return '<div class="a-tl-row">' +
-        '<div class="a-tl-period a-mono">' + e.period + '</div>' +
-        '<div class="a-tl-line"><span class="a-tl-dot"></span></div>' +
-        '<div class="a-tl-body">' +
-          '<div class="a-tl-company">' + e.company + '</div>' +
-          '<h3 class="a-tl-role">' + e.role + '</h3>' +
-          '<p class="a-tl-desc">' + e.desc + '</p>' +
-          '<div class="a-tl-tags">' +
-            e.tags.map(function (t) { return '<span class="a-chip a-chip-soft">' + t + '</span>'; }).join('') +
-          '</div></div></div>';
-    }).join('');
+  // Helper común: rellena `el` con items.map(tmpl). Devuelve true si el elemento
+  // existe (útil para encadenar lógica posterior, p. ej. observers).
+  function renderList(el, items, tmpl) {
+    if (!el) return false;
+    el.innerHTML = (items || []).map(tmpl).join('');
+    return true;
   }
+
+  // ── EXPERIENCE ────────────────────────────────────────────────────────────
+  renderList(document.getElementById('timeline'), A.experience, function (e) {
+    return '<div class="a-tl-row">' +
+      '<div class="a-tl-period a-mono">' + e.period + '</div>' +
+      '<div class="a-tl-line"><span class="a-tl-dot"></span></div>' +
+      '<div class="a-tl-body">' +
+        '<div class="a-tl-company">' + e.company + '</div>' +
+        '<h3 class="a-tl-role">' + e.role + '</h3>' +
+        '<p class="a-tl-desc">' + e.desc + '</p>' +
+        '<div class="a-tl-tags">' +
+          e.tags.map(function (t) { return '<span class="a-chip a-chip-soft">' + t + '</span>'; }).join('') +
+        '</div></div></div>';
+  });
 
   // ── SKILLS ────────────────────────────────────────────────────────────────
   const skillsGrid = document.getElementById('skills-grid');
@@ -429,8 +434,7 @@
     { title: 'Herramientas',      items: A.stack.tools    || [], accent: 'var(--a-accent-2)' },
   ];
 
-  if (skillsGrid) {
-    skillsGrid.innerHTML = BLOCKS.map(b => `
+  if (renderList(skillsGrid, BLOCKS, b => `
       <div class="a-skill-block">
         <h4>${b.title}</h4>
         <div class="a-stack">
@@ -443,7 +447,7 @@
               <div class="a-stack-val a-mono">${it.level}</div>
             </div>`).join('')}
         </div>
-      </div>`).join('');
+      </div>`)) {
 
     if (hasIO) {
       const barObserver = new IntersectionObserver(entries => {
@@ -463,9 +467,7 @@
   }
 
   // ── EDUCATION ─────────────────────────────────────────────────────────────
-  const eduList = document.getElementById('edu-list');
-  if (eduList) {
-    eduList.innerHTML = A.education.map(e => `
+  renderList(document.getElementById('edu-list'), A.education, e => `
       <div class="a-edu-row">
         <div class="a-edu-status a-mono">
           <span class="a-edu-pill ${e.status === 'Completado' ? 'a-edu-pill-done' : 'a-edu-pill-ongoing'}">${e.status}</span>
@@ -476,8 +478,7 @@
           <div class="a-edu-inst">${e.institution}</div>
           <p class="a-edu-desc">${e.desc}</p>
         </div>
-      </div>`).join('');
-  }
+      </div>`);
 
   // ── LANGUAGES ─────────────────────────────────────────────────────────────
   const langsEl = document.getElementById('langs');
