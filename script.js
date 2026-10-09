@@ -2,6 +2,15 @@
   const A = window.PORTFOLIO_DATA || {};
   const CFG = window.PORTFOLIO_CONFIG || {};
 
+  // Defaults defensivos: si data.js no carga, la página no se rompe con un
+  // TypeError y las secciones afectadas simplemente quedan vacías.
+  A.stats      = A.stats      || [];
+  A.projects   = A.projects   || [];
+  A.experience = A.experience || [];
+  A.education  = A.education  || [];
+  A.languages  = A.languages  || [];
+  A.stack      = A.stack      || {};
+
   // ── THEME ─────────────────────────────────────────────────────────────────
   const root    = document.querySelector('.a-root');
   const toggle  = document.getElementById('theme-toggle');
@@ -170,13 +179,18 @@
       var portraitWrap = portrait.closest('.a-hero-portrait');
       var heroMain = portrait.closest('.a-hero-main');
       if (heroMain && portraitWrap) {
+        var parallaxRaf = null;
         heroMain.addEventListener('mousemove', function (e) {
-          var rect = heroMain.getBoundingClientRect();
-          var x = (e.clientX - rect.left) / rect.width - 0.5;
-          var y = (e.clientY - rect.top) / rect.height - 0.5;
-          portraitWrap.style.transform = 'translate(' + (x * 12).toFixed(1) + 'px,' + (y * 10).toFixed(1) + 'px)';
-          var img = portrait.querySelector('img');
-          if (img) img.style.transform = 'scale(1.05) translate(' + (x * -5).toFixed(1) + 'px,' + (y * -4).toFixed(1) + 'px)';
+          if (parallaxRaf) return;
+          parallaxRaf = requestAnimationFrame(function () {
+            parallaxRaf = null;
+            var rect = heroMain.getBoundingClientRect();
+            var x = (e.clientX - rect.left) / rect.width - 0.5;
+            var y = (e.clientY - rect.top) / rect.height - 0.5;
+            portraitWrap.style.transform = 'translate(' + (x * 12).toFixed(1) + 'px,' + (y * 10).toFixed(1) + 'px)';
+            var img = portrait.querySelector('img');
+            if (img) img.style.transform = 'scale(1.05) translate(' + (x * -5).toFixed(1) + 'px,' + (y * -4).toFixed(1) + 'px)';
+          });
         });
         heroMain.addEventListener('mouseleave', function () {
           portraitWrap.style.transform = '';
@@ -409,10 +423,10 @@
   // ── SKILLS ────────────────────────────────────────────────────────────────
   const skillsGrid = document.getElementById('skills-grid');
   const BLOCKS = [
-    { title: 'Frontend',          items: A.stack.frontend, accent: 'var(--a-accent)'   },
-    { title: 'Backend',           items: A.stack.backend,  accent: 'var(--a-accent)'   },
-    { title: 'Análisis de Datos', items: A.stack.data,     accent: 'var(--a-accent-2)' },
-    { title: 'Herramientas',      items: A.stack.tools,    accent: 'var(--a-accent-2)' },
+    { title: 'Frontend',          items: A.stack.frontend || [], accent: 'var(--a-accent)'   },
+    { title: 'Backend',           items: A.stack.backend  || [], accent: 'var(--a-accent)'   },
+    { title: 'Análisis de Datos', items: A.stack.data     || [], accent: 'var(--a-accent-2)' },
+    { title: 'Herramientas',      items: A.stack.tools    || [], accent: 'var(--a-accent-2)' },
   ];
 
   if (skillsGrid) {
@@ -483,7 +497,7 @@
   if (contactList) {
     contactList.innerHTML = `
       <li><span class="a-mono">email</span><a href="mailto:${A.email}">${A.email}</a></li>
-      <li><span class="a-mono">tel</span><a href="tel:${A.phone.replace(/\s/g,'')}">${A.phone}</a></li>
+      <li><span class="a-mono">tel</span><a href="tel:${(A.phone || '').replace(/\s/g,'')}">${A.phone || ''}</a></li>
       <li><span class="a-mono">loc</span><span>${A.location}</span></li>
       <li><span class="a-mono">in</span><a href="${A.linkedin}" target="_blank" rel="noopener">linkedin.com/in/jorgeacedooliver</a></li>
       <li><span class="a-mono">git</span><a href="${A.github}" target="_blank" rel="noopener">github.com/jorgeoliver7</a></li>`;
