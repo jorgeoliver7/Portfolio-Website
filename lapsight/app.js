@@ -724,7 +724,7 @@
     var h = state.view === 'compare' ? '#/comparar/' + state.cmpA + '/' + state.cmpB
       : state.view === 'import' ? '#/importar'
       : '#/sesion/' + (state.current ? state.current.id : '');
-    if (location.hash !== h) history.replaceState(null, '', h);
+    try { if (location.hash !== h) history.replaceState(null, '', h); } catch (e) { /* marco sin historial */ }
   }
 
   function readHash() {
