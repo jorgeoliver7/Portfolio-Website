@@ -593,7 +593,7 @@
       text(String(r.bag.length), b.x + b.w / 2, b.y + b.h - 15, MONO(600, 10), C.fg, "center");
     }
     ctx.textBaseline = "top";
-    text("STOW A SACAS · 32 RUTAS", ST.x + ST.w / 2, ST.aisles[ST.aisles.length - 1].y + ST.h + 10, MONO(600, 10), C.muted, "center");
+    text(`STOW A SACAS · ${S.routes.length} RUTAS`, ST.x + ST.w / 2, Math.max(...ST.aisles.map((a) => a.y)) + ST.h + 10, MONO(600, 10), C.muted, "center");
   }
 
   function drawPick() {

@@ -28,7 +28,7 @@ window.DS_LAYOUT = {
     desc: "Lo que sale del camión se coloca en carros, separados por grupo y por tamaño. Cuando inducción tiene hueco, alguien lleva el siguiente carro hasta allí.",
     groups: [
       { id: "EQX1", aisles: [0, 1] },
-      { id: "DQX1", aisles: [2, 3] },
+      { id: "DQX1", aisles: [2] },
     ],
     classes: [
       { id: "S", name: "Pequeños", short: "PEQ", cap: 40 },
@@ -51,12 +51,12 @@ window.DS_LAYOUT = {
     rate: 1800, staff: 12,  // repartido entre pasillos
     desc: "Los stowers cogen el paquete del conveyor y lo meten en la saca de su ruta. Cada pasillo tiene las sacas de 8 rutas.",
     aisles: [
-      { id: "A", y: 252 },
-      { id: "B", y: 368 },
-      { id: "C", y: 484 },
-      { id: "D", y: 600 },
+      // de arriba abajo: C, B, A
+      { id: "A", y: 568 },
+      { id: "B", y: 410 },
+      { id: "C", y: 252 },
     ],
-    x: 180, w: 600, h: 108,
+    x: 180, w: 600, h: 144,
     routesPerAisle: 8,
     bagCapacity: 60,
   },
