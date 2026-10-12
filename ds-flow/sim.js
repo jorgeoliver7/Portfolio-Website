@@ -11,8 +11,8 @@
     t: 0, speed: 10 / 60, paused: false, auto: true,
     pkgs: new Map(),
     trucks: [], vans: [], transit: [],
-    receiveQ: [], inductQ: [],
-    acc: { receive: 0, induct: 0, pick: 0 },
+    inductQ: [], moves: [], nextCart: 1,
+    acc: { induct: 0, pick: 0 },
     staff: { receive: R.staff, induct: I.staff, stow: ST.staff, pick: P.staff },
     aisles: ST.aisles.map((a, i) => ({ ...a, idx: i, queue: [], acc: 0, done: 0 })),
     routes: [],
@@ -41,6 +41,12 @@
     }
   });
   const totalWeight = S.routes.reduce((s, r) => s + r.weight, 0);
+
+  // Zona de carros: un carril por grupo y tamaño
+  const groupOfAisle = (ai) => R.groups.findIndex((g) => g.aisles.includes(ai));
+  S.lanes = [];
+  R.groups.forEach((g, gi) => R.classes.forEach((c, ci) => S.lanes.push({ gi, ci, group: g, cls: c, open: null, closed: [] })));
+  const laneOf = (p) => S.lanes.find((l) => l.gi === p.group && l.cls.id === p.cls);
   function pickRoute() {
     let x = Math.random() * totalWeight;
     for (const r of S.routes) { x -= r.weight; if (x <= 0) return r; }
@@ -69,6 +75,19 @@
   };
   const padCenter = (i) => { const p = padRect(i); return { x: p.x + p.w / 2, y: p.y + p.h / 2 }; };
   const center = (z) => ({ x: z.x + z.w / 2, y: z.y + z.h / 2 });
+  // carriles de la zona de carros: dos grupos de tres tamaños a la derecha del título
+  const LANE_LEFT = 112, LANE_GAP = 12;
+  function laneRect(l) {
+    const gw = (R.w - LANE_LEFT - 8 - LANE_GAP * (R.groups.length - 1)) / R.groups.length;
+    const lw = gw / R.classes.length;
+    return { x: R.x + LANE_LEFT + l.gi * (gw + LANE_GAP) + l.ci * lw + 2, y: R.y + 26, w: lw - 4, h: R.h - 34 };
+  }
+  function laneCenter(l) { const r = laneRect(l); return { x: r.x + r.w / 2, y: r.y + 24 }; }
+  function stagingCount() {
+    let n = 0;
+    for (const l of S.lanes) { if (l.open) n += l.open.items.length; for (const c of l.closed) n += c.items.length; }
+    return n;
+  }
   const rate = (base, key, cfg) => (base * S.staff[key]) / cfg.staff;
 
   // ── Utilidades ────────────────────────────────────────
@@ -88,13 +107,13 @@
   }
   function hist(p, msg) { p.hist.push({ t: S.t, msg }); }
 
-  const SIZES = [["Sobre", 0.3], ["Pequeño", 1.2], ["Mediano", 3.5], ["Grande", 9]];
+  const SIZES = [["Sobre", 0.3, "S"], ["Pequeño", 1.2, "S"], ["Mediano", 3.5, "M"], ["Oversize", 9, "O"]];
   function newPkg(truck) {
     let id;
     do { id = "DS" + String(Math.floor(Math.random() * 1e8)).padStart(8, "0"); } while (S.pkgs.has(id));
     const r = pickRoute(), sz = SIZES[Math.floor(Math.random() ** 1.6 * SIZES.length)];
     const p = {
-      id, route: r.n, size: sz[0], weight: +(sz[1] * (0.6 + Math.random() * 0.8)).toFixed(1),
+      id, route: r.n, size: sz[0], cls: sz[2], group: groupOfAisle(r.aisle), weight: +(sz[1] * (0.6 + Math.random() * 0.8)).toFixed(1),
       cp: "11" + String(Math.floor(Math.random() * 690) + 1).padStart(3, "0"),
       truck: truck.id, sorted: false, where: "truck", hist: [], unloadedAt: S.t,
     };
@@ -130,7 +149,15 @@
     const p = tr.pkg; p.tr = null;
     const r = S.routes[p.route - 1];
     switch (tr.dest) {
-      case "receive": p.where = "receive"; hist(p, "Escaneado en recepción"); S.receiveQ.push(p); break;
+      case "receive": {
+        const l = laneOf(p);
+        if (!l.open) l.open = { id: "C-" + String(S.nextCart++).padStart(3, "0"), items: [], openedAt: S.t };
+        l.open.items.push(p); l.open.touchedAt = S.t; l.open.bump = performance.now() / 1000;
+        p.where = "staging"; p.cartId = l.open.id;
+        hist(p, `Recepción · carro ${l.open.id} (${l.group.id} · ${l.cls.name.toLowerCase()})`);
+        if (l.open.items.length >= l.cls.cap) { l.open.closedAt = S.t; l.closed.push(l.open); l.open = null; }
+        break;
+      }
       case "induct": p.where = "induct"; S.inductQ.push(p); break;
       case "aisle": p.where = "aisle"; S.aisles[r.aisle].queue.push(p); break;
       case "bag":
@@ -215,21 +242,34 @@
         while (t.acc >= 1 && t.units > 0) {
           t.acc--; t.units--; S.received++;
           const p = newPkg(t), x = dockX(t.dock);
-          send(p, [{ x, y: D.wallY }, { x: Math.max(x + (Math.random() - 0.5) * 30, R.x + 10), y: R.y + 14 }], "receive");
+          const lc = laneCenter(laneOf(p));
+          send(p, [{ x, y: D.wallY }, { x, y: R.y - 2 }, { x: lc.x, y: R.y - 2 }, { x: lc.x, y: lc.y }], "receive");
         }
         if (!t.units) { t.state = "leaving"; t.p = 0; log(`Camión ${t.id} vacío, libera el muelle ${t.dock + 1}`, "in"); }
       } else t.p += dt / VEH;
     }
     S.trucks = S.trucks.filter((t) => !(t.state === "leaving" && t.p >= 1));
 
-    // Recepción → Inducción
-    S.acc.receive = Math.min(S.acc.receive + (rate(R.rate, "receive", R) / 60) * dt, 3);
-    while (S.acc.receive >= 1 && S.receiveQ.length) {
-      S.acc.receive--;
-      const p = S.receiveQ.shift();
-      const x0 = R.x + 20 + Math.random() * (R.w - 40);
-      send(p, [{ x: x0, y: R.y + R.h - 14 }, { x: R.x + 6, y: R.y + R.h - 14 }, { x: I.x + I.w - 8, y: I.y + I.h / 2 + 10 }], "induct");
+    // Zona de carros → Inducción: cuando inducción tiene hueco, se lleva el carro más antiguo
+    for (const l of S.lanes) {
+      if (l.open && l.open.items.length && S.t - l.open.touchedAt > R.staleMinutes) { l.open.closedAt = S.t; l.closed.push(l.open); l.open = null; }
     }
+    while (S.moves.length < S.staff.receive && S.inductQ.length < 40) {
+      let best = null;
+      for (const l of S.lanes) if (l.closed.length && (!best || l.closed[0].closedAt < best.closed[0].closedAt)) best = l;
+      if (!best) break;
+      const cart = best.closed.shift(), from = laneCenter(best);
+      for (const p of cart.items) { p.where = "moving"; hist(p, `Carro ${cart.id} llevado a inducción`); }
+      // el carro baja al pasillo bajo la zona de carros y va por él hasta inducción
+      const gy = R.y + R.h + 8, pts = [from, { x: from.x, y: gy }, { x: I.x + I.w / 2, y: gy }, { x: I.x + I.w / 2, y: I.y + I.h - 22 }];
+      const segs = pts.slice(1).map((q, i) => Math.hypot(q.x - pts[i].x, q.y - pts[i].y));
+      S.moves.push({ cart, lane: best, pts, segs, total: segs.reduce((a, b) => a + b, 0), p: 0 });
+    }
+    for (const m of S.moves) {
+      m.p += dt / R.moveMinutes;
+      if (m.p >= 1) for (const p of m.cart.items) { p.where = "induct"; S.inductQ.push(p); }
+    }
+    S.moves = S.moves.filter((m) => m.p < 1);
 
     // Inducción → conveyor → pasillo
     S.acc.induct = Math.min(S.acc.induct + (rate(I.rate, "induct", I) / 60) * dt, 3);
@@ -305,9 +345,9 @@
     // Piloto automático
     if (S.auto) {
       const inPlant = S.received - S.dispatched;
-      if (inPlant < 2600 && S.receiveQ.length < 120 && S.t - S.lastAutoTruck > 4) { addTruck(false); S.lastAutoTruck = S.t; }
+      if (inPlant < 2600 && stagingCount() < 400 && S.t - S.lastAutoTruck > 4) { addTruck(false); S.lastAutoTruck = S.t; }
       if (S.t - S.lastAutoVan > 0.5) {
-        const r = S.routes.filter((x) => !x.van && x.bag.length >= 30).sort((a, b) => b.bag.length - a.bag.length)[0];
+        const r = S.routes.filter((x) => !x.van && x.bag.length >= 20).sort((a, b) => b.bag.length - a.bag.length)[0];
         if (r && freePad() >= 0) callVan(r, false);
         S.lastAutoVan = S.t;
       }
@@ -331,7 +371,7 @@
   // Minutos de cola por proceso
   function loads() {
     const out = [
-      { name: "Recepción", m: S.receiveQ.length / (rate(R.rate, "receive", R) / 60) },
+      { name: "la zona de carros", m: stagingCount() / (rate(I.rate, "induct", I) / 60) },
       { name: "Inducción", m: S.inductQ.length / (rate(I.rate, "induct", I) / 60) },
     ];
     const perAisle = rate(ST.rate, "stow", ST) / S.aisles.length / 60;
@@ -461,6 +501,53 @@
     text(t.units + " paq", x + w / 2, y + 48, MONO(500, 10), C.soft, "center");
   }
 
+  const movePos = (m) => posOf({ pts: m.pts, segs: m.segs, d: Math.min(m.p, 1) * m.total });
+
+  function drawCartIcon(x, y, w, h, fill, color, open, k) {
+    if (PLAY) { ctx.fillStyle = C.wheel; ctx.fillRect(x + 2, y + h - 1, 3, 3); ctx.fillRect(x + w - 5, y + h - 1, 3, 3); }
+    ctx.fillStyle = C.floor; rr(x, y, w, h, PLAY ? 4 : 2); ctx.fill();
+    ctx.save(); rr(x, y, w, h, PLAY ? 4 : 2); ctx.clip();
+    ctx.fillStyle = C.box; const fh = h * fill * (1 + (k || 0) * 0.08);
+    ctx.fillRect(x, y + h - fh, w, fh); ctx.restore();
+    ctx.strokeStyle = color; ctx.lineWidth = 1.5;
+    if (open) ctx.setLineDash([3, 2]);
+    rr(x, y, w, h, PLAY ? 4 : 2); ctx.stroke(); ctx.setLineDash([]);
+  }
+
+  function drawStaging() {
+    const n = stagingCount();
+    zoneBox(R, "receive", n / (rate(I.rate, "induct", I) / 60));
+    ctx.textBaseline = "top";
+    text(String(n), R.x + 10, R.y + 50, MONO(600, 20), C.fg);
+    text("paquetes en carros", R.x + 10, R.y + 74, SANS(500, 10), C.muted);
+    R.groups.forEach((g, gi) => {
+      const first = laneRect(S.lanes[gi * R.classes.length]), last = laneRect(S.lanes[gi * R.classes.length + R.classes.length - 1]);
+      text(g.id, first.x, R.y + 10, MONO(600, 11), C.aisle[g.aisles[0]]);
+      text("pasillos " + g.aisles.map((i) => ST.aisles[i].id).join("·"), last.x + last.w, R.y + 11, MONO(500, 9), C.muted, "right");
+    });
+    const cw = 16, ch = 22, gap = 5;
+    for (let i = 0; i < S.lanes.length; i++) {
+      const l = S.lanes[i], lr = laneRect(l), col = C.aisle[l.group.aisles[0]];
+      ctx.fillStyle = C.floor; rr(lr.x, lr.y, lr.w, lr.h, PLAY ? 8 : 4); ctx.fill();
+      if (isSel("lane", i)) { ctx.strokeStyle = C.sel; ctx.lineWidth = 2; ctx.stroke(); }
+      text(l.cls.short, lr.x + 5, lr.y + lr.h - 12, MONO(600, 8), C.muted);
+      const carts = (l.open ? [l.open] : []).concat(l.closed);
+      const perRow = Math.floor((lr.w - 6) / (cw + gap)), rows = 2, max = perRow * rows;
+      carts.slice(0, max).forEach((c, j) => {
+        const x = lr.x + 5 + (j % perRow) * (cw + gap), y = lr.y + 5 + Math.floor(j / perRow) * (ch + 6);
+        drawCartIcon(x, y, cw, ch, c.items.length / l.cls.cap, col, c === l.open, PLAY ? bump(c.bump || 0, NOW) : 0);
+      });
+      if (carts.length > max) text("+" + (carts.length - max), lr.x + lr.w - 4, lr.y + lr.h - 12, MONO(600, 8), C.soft, "right");
+    }
+  }
+
+  function drawMoves() {
+    for (const m of S.moves) {
+      const p = movePos(m), l = m.lane;
+      drawCartIcon(p.x - 8, p.y - 11, 16, 22, m.cart.items.length / l.cls.cap, C.aisle[l.group.aisles[0]], false, 0);
+    }
+  }
+
   function drawQueueZone(z, kind, q, cfg) {
     zoneBox(z, kind, q.length / (rate(cfg.rate, kind, cfg) / 60));
     ctx.textBaseline = "top";
@@ -584,7 +671,7 @@
       if (!PLAY) { ctx.fillStyle = col; ctx.fillRect(p.x - 3.5, p.y - 3.5, 7, 7); continue; }
       // cajita de cartón que se balancea, con la cinta del color de su pasillo
       const seed = pkg.seed || (pkg.seed = Math.random() * 6.28);
-      const big = pkg.size === "Grande" ? 1.35 : pkg.size === "Sobre" ? 0.8 : 1;
+      const big = pkg.size === "Oversize" ? 1.35 : pkg.size === "Sobre" ? 0.8 : 1;
       ctx.save();
       ctx.translate(p.x, p.y + Math.sin(time * 9 + seed) * 0.9);
       ctx.rotate(Math.sin(time * 3 + seed) * 0.14);
@@ -625,7 +712,8 @@
     const r = S.routes[p.route - 1];
     switch (p.where) {
       case "transit": return p.tr ? posOf(p.tr) : null;
-      case "receive": return center(R);
+      case "staging": { const l = laneOf(p); return l ? laneCenter(l) : center(R); }
+      case "moving": { const m = S.moves.find((x) => x.cart.items.includes(p)); return m ? movePos(m) : center(I); }
       case "induct": return center(I);
       case "aisle": return { x: ST.x + 14, y: beltY(ST.aisles[r.aisle]) };
       case "bag": return bagCenter(r);
@@ -648,10 +736,11 @@
       for (let y = 0; y < L.height; y += 40) { ctx.beginPath(); ctx.moveTo(0, y + 0.5); ctx.lineTo(L.width, y + 0.5); ctx.stroke(); }
     }
     drawDocks(); drawBelts(time);
-    drawQueueZone(R, "receive", S.receiveQ, R);
+    drawStaging();
     drawQueueZone(I, "induct", S.inductQ, I);
     drawAisles(); drawPick(); drawYard();
     for (const t of S.trucks) drawTruck(t);
+    drawMoves();
     drawTransit(time);
     drawFx(time);
     const tp = trackedPos();
@@ -681,6 +770,7 @@
     for (const r of S.routes) if (inside(x, y, bagRect(r))) return { kind: "route", id: r.n };
     for (const r of S.routes) if ((r.van || r.cart.length) && inside(x, y, cartRect(r))) return { kind: "route", id: r.n };
     for (const a of ST.aisles) if (inside(x, y, { x: ST.x, y: a.y, w: ST.w, h: ST.h })) return { kind: "aisle", id: a.id };
+    for (let i = 0; i < S.lanes.length; i++) if (inside(x, y, laneRect(S.lanes[i]))) return { kind: "lane", id: i };
     const zones = { receive: R, induct: I, pick: P, yard: Y };
     for (const k in zones) if (inside(x, y, zones[k])) return { kind: "zone", id: k };
     if (Math.abs(x - CV.x) < 12 && y > CV.top && y < CV.bottom) return { kind: "zone", id: "conveyor" };
@@ -739,7 +829,7 @@
     el.innerHTML = S.events.slice(0, 14).map((e) => `<li class="is-${e.kind}"><time>${clock(e.t)}</time>${esc(e.msg)}</li>`).join("");
   }
 
-  const STATUS = { truck: "En el camión", transit: "En movimiento", receive: "En recepción", induct: "Esperando inducción", aisle: "En el conveyor, esperando stow",
+  const STATUS = { truck: "En el camión", transit: "En movimiento", staging: "En la zona de carros", moving: "Carro de camino a inducción", induct: "Esperando inducción", aisle: "En el conveyor, esperando stow",
     bag: "En la saca", cart: "En el carro de pick", van: "Cargado en furgoneta", route: "En reparto", delivered: "Entregado" };
 
   function staffCtl(key) {
@@ -755,8 +845,13 @@
       const p = S.pkgs.get(s.id); if (!p) { S.selected = null; return renderDetail(); }
       const r = S.routes[p.route - 1];
       el.innerHTML = head("PKG", p.id) +
-        stats([["Estado", STATUS[p.where] || p.where], ["Ruta", p.sorted ? `${r.code} · ${r.town}` : "Pendiente de inducción"], ["CP destino", p.cp], ["Tamaño", `${p.size} · ${p.weight} kg`]]) +
+        stats([["Estado", STATUS[p.where] || p.where], ["Grupo", R.groups[p.group].id], ["Ruta", p.sorted ? `${r.code} · ${r.town}` : "Pendiente de inducción"], ["CP destino", p.cp], ["Tamaño", `${p.size} · ${p.weight} kg`]]) +
         `<ol class="ds-timeline">${p.hist.slice().reverse().map((h) => `<li><time>${clock(h.t)}</time>${esc(h.msg)}</li>`).join("")}</ol>`;
+    } else if (s.kind === "lane") {
+      const l = S.lanes[s.id], waiting = l.closed.reduce((t, c) => t + c.items.length, 0);
+      el.innerHTML = head(l.cls.short, `${l.group.id} · ${l.cls.name}`) +
+        `<p>Carros de paquetes ${l.cls.name.toLowerCase()} del grupo ${l.group.id}, que van a los pasillos ${l.group.aisles.map((i) => ST.aisles[i].id).join(" y ")}.</p>` +
+        stats([["Carro abierto", l.open ? `${l.open.id} · ${l.open.items.length}/${l.cls.cap}` : "—"], ["Carros cerrados esperando", l.closed.length], ["Paquetes esperando", waiting + (l.open ? l.open.items.length : 0)], ["Capacidad por carro", l.cls.cap]]);
     } else if (s.kind === "route") {
       const r = S.routes[s.id - 1];
       el.innerHTML = head(r.code, `Ruta ${r.code} · ${r.town}`) +
@@ -781,7 +876,7 @@
     } else {
       const cfg = { receive: R, induct: I, pick: P, yard: Y }[s.id];
       let rows;
-      if (s.id === "receive") rows = [["En cola", S.receiveQ.length], ["Capacidad", Math.round(rate(R.rate, "receive", R)) + " paq/h"]];
+      if (s.id === "receive") rows = [["Paquetes en carros", stagingCount()], ["Carros esperando", S.lanes.reduce((t, l) => t + l.closed.length, 0)], ["Carros en camino", S.moves.length]];
       if (s.id === "induct") rows = [["En cola", S.inductQ.length], ["Capacidad", Math.round(rate(I.rate, "induct", I)) + " paq/h"]];
       if (s.id === "pick") rows = [["Por recoger", S.routes.reduce((t, r) => t + r.toPick, 0)], ["Rutas en pick", S.routes.filter((r) => r.toPick || r.cart.length).length], ["Capacidad", Math.round(rate(P.rate, "pick", P)) + " paq/h"]];
       if (s.id === "yard") rows = [["Furgonetas", `${S.vans.length}/${Y.pads}`], ["Tiempo medio en yard", S.vanTimes.length ? fmtMin(avg(S.vanTimes)) : "—"], ["Salidas", S.routesOut]];
