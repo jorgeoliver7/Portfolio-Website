@@ -11,7 +11,7 @@ window.PORTFOLIO_DATA = {
 
   stats: [
     { value: "3+", label: "años de experiencia" },
-    { value: "9", label: "proyectos destacados" },
+    { value: "10", label: "proyectos destacados" },
     { value: "10+", label: "tecnologías" },
     { value: "2", label: "perfiles fusionados" },
   ],
@@ -46,6 +46,16 @@ window.PORTFOLIO_DATA = {
   projects: [
     {
       id: 1,
+      name: "DS Flow",
+      category: "data",
+      desc: "Mapa interactivo y animado de una estación de reparto de última milla: camiones, inducción, conveyor, stow a sacas, pick por rutas y yard. Rastreo de cada paquete y centro de control con KPIs del ciclo en vivo.",
+      stack: ["JavaScript", "Canvas", "Simulación", "KPIs logísticos"],
+      repo: "https://github.com/jorgeoliver7/Portfolio-Website/tree/main/ds-flow",
+      live: "jorgeoliver7.github.io/Portfolio-Website/ds-flow/",
+      year: "2026",
+    },
+    {
+      id: 2,
       name: "LapSight",
       category: "fullstack",
       desc: "Plataforma de telemetría y gestión 360° para equipos de motorsport: importación multi-formato, tests estadísticos vuelta a vuelta, equipos, calendario y demo en vivo.",
@@ -55,7 +65,7 @@ window.PORTFOLIO_DATA = {
       year: "2025",
     },
     {
-      id: 2,
+      id: 3,
       name: "AcedoMotor",
       category: "fullstack",
       desc: "Portal de motos usadas en producción: anuncios verificados, cuenta oficial con tick, moderación, mensajería, subida de fotos y panel admin. Producto real desplegado.",
@@ -65,7 +75,7 @@ window.PORTFOLIO_DATA = {
       year: "2026",
     },
     {
-      id: 3,
+      id: 4,
       name: "Portfolio Interactivo",
       category: "frontend",
       desc: "Este sitio: diseño editorial, animaciones de entrada, modo oscuro/claro, filtros de proyectos y formulario de contacto con Web3Forms.",
@@ -75,7 +85,7 @@ window.PORTFOLIO_DATA = {
       year: "2026",
     },
     {
-      id: 4,
+      id: 5,
       name: "RealEstateAnalytics",
       category: "data",
       desc: "Pipeline inmobiliario end-to-end: scraping, ETL, EDA, ML predictivo (Random Forest R² 0.986) y dashboard Streamlit interactivo.",
@@ -84,7 +94,7 @@ window.PORTFOLIO_DATA = {
       year: "2026",
     },
     {
-      id: 5,
+      id: 6,
       name: "FindYourPrompt",
       category: "fullstack",
       desc: "Plataforma para descubrir, crear y compartir prompts optimizados para IA.",
@@ -94,7 +104,7 @@ window.PORTFOLIO_DATA = {
       year: "2025",
     },
     {
-      id: 6,
+      id: 7,
       name: "Noventa Scouting",
       category: "data",
       desc: "Scouting futbolístico por 90 minutos: métricas per-90, percentiles posicionales, búsqueda por similitud e informes one-page sobre API-Football.",
@@ -103,7 +113,7 @@ window.PORTFOLIO_DATA = {
       year: "2026",
     },
     {
-      id: 7,
+      id: 8,
       name: "F1 Data Analysis",
       category: "data",
       desc: "Análisis completo de F1 con FastF1: ETL, 25+ visualizaciones, telemetría, clasificación multi-sesión y modelos Random Forest + XGBoost.",
@@ -112,7 +122,7 @@ window.PORTFOLIO_DATA = {
       year: "2026",
     },
     {
-      id: 8,
+      id: 9,
       name: "iRacing Setup Assistant",
       category: "fullstack",
       desc: "Encuentra, genera y comparte configuraciones óptimas de iRacing por circuito.",
@@ -122,7 +132,7 @@ window.PORTFOLIO_DATA = {
       year: "2025",
     },
     {
-      id: 9,
+      id: 10,
       name: "Amazon FC Analytics Suite",
       category: "data",
       desc: "Suite de analytics operativos para fulfillment center: patio (Turn Time, OTD), productividad UPH, asistente KPI con Claude API y modelo SQL con 30+ queries avanzadas.",
