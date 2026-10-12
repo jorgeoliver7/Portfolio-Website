@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LapSight · Análisis de telemetría para equipos de motorsport</title>
+  <meta name="description" content="Demo interactiva de LapSight: tiempos por vuelta, sectores sobre trazados GPS reales, stints, detección de anomalías con Isolation Forest y tests estadísticos entre pilotos. Todo calculado en el navegador. Por Jorge Acedo.">
+  <meta name="author" content="Jorge Acedo">
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <link rel="canonical" href="https://jorgeoliver7.github.io/Portfolio-Website/lapsight/">
+  <meta property="og:title" content="LapSight · See every lap">
+  <meta property="og:description" content="Analiza sesiones de pista, compara pilotos con tests estadísticos y sube tu propio CSV de tiempos.">
+  <meta property="og:url" content="https://jorgeoliver7.github.io/Portfolio-Website/lapsight/">
+  <meta property="og:type" content="website">
+  <script>
+    (function () {
+      var t = "dark"; try { t = localStorage.getItem("a-theme") || "dark"; } catch (e) {}
+      document.documentElement.dataset.theme = t === "light" ? "light" : "dark";
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="lapsight.css">
+</head>
+<body>
+  <header class="ls-top">
+    <a class="ls-back" href="../#projects">← Portfolio</a>
+    <div class="ls-brand">
+      <span class="ls-logo" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="ls-wordmark">LAP<b>SIGHT</b></span>
+      <span class="ls-tag">See every lap</span>
+    </div>
+    <nav class="ls-tabs" role="tablist" aria-label="Vistas">
+      <button role="tab" data-view="session" aria-selected="true">Sesión</button>
+      <button role="tab" data-view="compare" aria-selected="false">Comparar</button>
+      <button role="tab" data-view="import" aria-selected="false">Importar CSV</button>
+    </nav>
+    <div class="ls-top-actions">
+      <a class="ls-ghost" href="https://github.com/jorgeoliver7/LapSight" target="_blank" rel="noopener">Código ↗</a>
+      <button class="ls-icon" id="ls-theme" aria-label="Cambiar tema">☀</button>
+    </div>
+  </header>
+
+  <div class="ls-shell">
+    <aside class="ls-side" aria-label="Sesiones">
+      <div class="ls-side-head">
+        <span class="ls-label">Sesiones</span>
+        <span class="ls-label ls-dim" id="ls-session-count"></span>
+      </div>
+      <label class="ls-side-select">
+        <span class="ls-label">Sesión</span>
+        <select id="ls-session-select"></select>
+      </label>
+      <ul class="ls-session-list" id="ls-session-list"></ul>
+      <div class="ls-side-foot">
+        <span class="ls-label">Equipo demo</span>
+        <p>Acedo Racing · 3 pilotos · 4 vehículos. Datos sintéticos con el mismo generador que usa el backend.</p>
+      </div>
+    </aside>
+
+    <main class="ls-main">
+      <!-- ═══ SESIÓN ═══ -->
+      <section class="ls-view" data-view="session" id="view-session">
+        <div class="ls-session-head">
+          <div>
+            <div class="ls-kicker" id="sh-kicker"></div>
+            <h1 id="sh-title"></h1>
+            <div class="ls-meta" id="sh-meta"></div>
+          </div>
+          <div class="ls-head-actions">
+            <button class="ls-btn" id="sh-export">Exportar CSV</button>
+            <button class="ls-btn ls-btn--accent" id="sh-compare">Comparar →</button>
+          </div>
+        </div>
+        <p class="ls-notes" id="sh-notes"></p>
+
+        <div class="ls-kpis" id="sh-kpis"></div>
+
+        <div class="ls-grid ls-grid--map">
+          <section class="ls-panel">
+            <header class="ls-panel-head">
+              <span class="ls-label">Trazado · repetición</span>
+              <span class="ls-label ls-dim" id="map-circuit"></span>
+            </header>
+            <div class="ls-map-wrap">
+              <svg class="ls-map" id="ls-map" viewBox="0 0 100 100" role="img" aria-label="Mapa del circuito"></svg>
+              <div class="ls-timing" id="ls-timing">
+                <div><span class="ls-label">Vuelta</span><b id="tm-lap">—</b></div>
+                <div><span class="ls-label">Crono</span><b id="tm-clock">—</b></div>
+                <div><span class="ls-label">Δ mejor</span><b id="tm-delta">—</b></div>
+              </div>
+            </div>
+            <div class="ls-sectors" id="ls-sector-tiles"></div>
+            <div class="ls-replay">
+              <button class="ls-btn ls-btn--accent" id="rp-play">▶ Reproducir</button>
+              <label class="ls-field">Vuelta
+                <select id="rp-lap"></select>
+              </label>
+              <label class="ls-field ls-check"><input type="checkbox" id="rp-ghost" checked> Fantasma de la mejor</label>
+            </div>
+          </section>
+
+          <section class="ls-panel">
+            <header class="ls-panel-head">
+              <span class="ls-label">Tiempos por vuelta</span>
+              <span class="ls-legend" id="chart-legend"></span>
+            </header>
+            <div class="ls-chart" id="ls-lapchart"></div>
+            <div class="ls-stints" id="ls-stints"></div>
+          </section>
+        </div>
+
+        <div class="ls-grid ls-grid--table">
+          <section class="ls-panel">
+            <header class="ls-panel-head">
+              <span class="ls-label">Vueltas y sectores</span>
+              <span class="ls-label ls-dim">gap respecto al mejor parcial</span>
+            </header>
+            <div class="ls-table-wrap">
+              <table class="ls-table" id="ls-laps"></table>
+            </div>
+          </section>
+          <section class="ls-panel">
+            <header class="ls-panel-head">
+              <span class="ls-label">Insights automáticos</span>
+              <span class="ls-label ls-dim" id="ins-count"></span>
+            </header>
+            <ul class="ls-insights" id="ls-insights"></ul>
+          </section>
+        </div>
+      </section>
+
+      <!-- ═══ COMPARAR ═══ -->
+      <section class="ls-view" data-view="compare" id="view-compare" hidden>
+        <div class="ls-session-head">
+          <div>
+            <div class="ls-kicker">Head to head</div>
+            <h1>¿Es la diferencia real o ruido?</h1>
+            <p class="ls-sub">Welch t-test, Mann-Whitney U y tamaño del efecto sobre las vueltas válidas, sin contar las de salida.</p>
+          </div>
+        </div>
+        <div class="ls-pickers">
+          <label class="ls-field ls-field--a"><span class="ls-dot ls-dot--a"></span>A
+            <select id="cmp-a"></select>
+          </label>
+          <button class="ls-icon" id="cmp-swap" aria-label="Intercambiar">⇄</button>
+          <label class="ls-field ls-field--b"><span class="ls-dot ls-dot--b"></span>B
+            <select id="cmp-b"></select>
+          </label>
+        </div>
+        <div class="ls-verdict" id="cmp-verdict"></div>
+        <div class="ls-grid ls-grid--cmp">
+          <section class="ls-panel">
+            <header class="ls-panel-head"><span class="ls-label">Distribución de tiempos (KDE)</span></header>
+            <div class="ls-chart" id="cmp-kde"></div>
+          </section>
+          <section class="ls-panel">
+            <header class="ls-panel-head"><span class="ls-label">Vuelta a vuelta</span></header>
+            <div class="ls-chart" id="cmp-laps"></div>
+          </section>
+        </div>
+        <div class="ls-grid ls-grid--cmp">
+          <section class="ls-panel">
+            <header class="ls-panel-head"><span class="ls-label">Tests estadísticos</span></header>
+            <table class="ls-table ls-table--tests" id="cmp-tests"></table>
+          </section>
+          <section class="ls-panel">
+            <header class="ls-panel-head"><span class="ls-label">Resumen</span></header>
+            <table class="ls-table ls-table--tests" id="cmp-summary"></table>
+          </section>
+        </div>
+      </section>
+
+      <!-- ═══ IMPORTAR ═══ -->
+      <section class="ls-view" data-view="import" id="view-import" hidden>
+        <div class="ls-session-head">
+          <div>
+            <div class="ls-kicker">Tus datos</div>
+            <h1>Analiza tu propia sesión</h1>
+            <p class="ls-sub">Arrastra un CSV exportado de tu cronometraje o pega los tiempos. Se procesa en tu navegador: nada sale de tu equipo.</p>
+          </div>
+        </div>
+        <div class="ls-grid ls-grid--import">
+          <section class="ls-panel">
+            <label class="ls-drop" id="imp-drop">
+              <input type="file" id="imp-file" accept=".csv,.txt,text/csv">
+              <span class="ls-drop-icon">⤓</span>
+              <b>Suelta aquí tu CSV</b>
+              <span>o pulsa para elegir un archivo</span>
+            </label>
+            <label class="ls-label" for="imp-text">o pega los datos</label>
+            <textarea id="imp-text" rows="9" spellcheck="false" placeholder="lap,time,s1,s2,s3,compound&#10;1,1:41.230,34.512,36.881,29.837,M&#10;2,1:39.874,..."></textarea>
+            <div class="ls-import-row">
+              <label class="ls-field">Circuito <select id="imp-circuit"></select></label>
+              <label class="ls-field">Piloto <input id="imp-driver" type="text" value="Yo" maxlength="32"></label>
+            </div>
+            <div class="ls-import-row">
+              <button class="ls-btn ls-btn--accent" id="imp-go">Analizar sesión →</button>
+              <button class="ls-btn" id="imp-sample">Cargar ejemplo</button>
+              <button class="ls-btn" id="imp-download">Descargar CSV de ejemplo</button>
+            </div>
+            <p class="ls-msg" id="imp-msg" role="status"></p>
+          </section>
+          <section class="ls-panel ls-doc">
+            <header class="ls-panel-head"><span class="ls-label">Formato aceptado</span></header>
+            <p>Detecta el separador (<code>,</code> <code>;</code> o tabulador) y reconoce las cabeceras más habituales de AiM, MyLaps, iRacing, RaceChrono o una hoja propia, en inglés o en español.</p>
+            <table class="ls-table ls-table--doc">
+              <tr><th>Campo</th><th>Cabeceras</th></tr>
+              <tr><td>Vuelta</td><td>lap, lap_number, vuelta, #</td></tr>
+              <tr><td>Tiempo *</td><td>time, lap_time, laptime, tiempo</td></tr>
+              <tr><td>Sectores</td><td>s1…s3, sector 1, split 1</td></tr>
+              <tr><td>Compuesto</td><td>compound, tyre, neumático (S/M/H/I/W)</td></tr>
+              <tr><td>Válida</td><td>valid, ok (0/1, true/false)</td></tr>
+            </table>
+            <p>Tiempos como <code>1:35.412</code>, <code>95.412</code> o <code>95412</code> (ms). Con sectores se activa el mapa, el theoretical best y la detección de anomalías multivariante.</p>
+          </section>
+        </div>
+      </section>
+
+      <footer class="ls-foot">
+        <p><b>Demo estática de LapSight.</b> La app completa usa Spring Boot, FastAPI (pandas, scipy, scikit-learn), React y PostgreSQL. Aquí el motor analítico está portado a JavaScript para que funcione sin servidor: k-means para stints, Isolation Forest para anomalías, regresión para la degradación y t de Student exacta para los tests.</p>
+        <p><a href="https://lapsight.onrender.com" target="_blank" rel="noopener">App completa con equipos, calendario y PDF ↗</a> · <a href="https://github.com/jorgeoliver7/LapSight" target="_blank" rel="noopener">Repositorio ↗</a> · Trazados GPS de OpenStreetMap.</p>
+      </footer>
+    </main>
+  </div>
+
+  <div class="ls-tip" id="ls-tip" hidden></div>
+
+  <script src="circuits.js"></script>
+  <script src="analytics.js"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
