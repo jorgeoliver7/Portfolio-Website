@@ -349,6 +349,11 @@
 
   function projectLinks(p) {
     var links = [];
+    if (p.demo) {
+      links.push(
+        '<a class="a-project-link a-project-link--demo" href="' + p.demo + '">probar demo →</a>'
+      );
+    }
     if (p.repo) {
       links.push(
         '<a class="a-project-link" href="' + p.repo + '" target="_blank" rel="noopener">repo ↗</a>'
@@ -356,7 +361,7 @@
     }
     if (p.live) {
       links.push(
-        '<a class="a-project-link" href="https://' + p.live + '" target="_blank" rel="noopener">visitar ↗</a>'
+        '<a class="a-project-link" href="https://' + p.live + '" target="_blank" rel="noopener">' + (p.demo ? 'app completa ↗' : 'visitar ↗') + '</a>'
       );
     }
     return links.length

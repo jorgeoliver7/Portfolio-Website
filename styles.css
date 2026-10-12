@@ -685,6 +685,7 @@ html.a-js .a-hero-text.is-go .a-hero-cta {
 }
 .a-project-link  { font-family:"JetBrains Mono",monospace; font-size:11px; color:var(--a-fg); }
 .a-project-link:hover { color:var(--a-accent); }
+.a-project-link--demo { color:var(--a-accent); font-weight:600; }
 
 /* ── TIMELINE ──────────────────────────────────────── */
 .a-timeline { display:grid; gap:32px; }

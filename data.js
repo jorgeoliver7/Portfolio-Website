@@ -58,10 +58,11 @@ window.PORTFOLIO_DATA = {
       id: 2,
       name: "LapSight",
       category: "fullstack",
-      desc: "Plataforma de telemetría y gestión 360° para equipos de motorsport: importación multi-formato, tests estadísticos vuelta a vuelta, equipos, calendario y demo en vivo.",
+      desc: "Plataforma de telemetría y gestión 360° para equipos de motorsport. Pruébala aquí mismo: sectores sobre trazados GPS reales con repetición de vuelta, stints, anomalías con Isolation Forest, tests estadísticos entre pilotos e importación de tu propio CSV.",
       stack: ["Spring Boot", "FastAPI", "React", "TypeScript", "PostgreSQL"],
       repo: "https://github.com/jorgeoliver7/LapSight",
       live: "lapsight.onrender.com",
+      demo: "lapsight/",
       year: "2025",
     },
     {
