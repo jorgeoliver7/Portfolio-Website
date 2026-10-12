@@ -11,7 +11,7 @@ window.PORTFOLIO_DATA = {
 
   stats: [
     { value: "3+", label: "años de experiencia" },
-    { value: "10", label: "proyectos destacados" },
+    { value: "7", label: "proyectos destacados" },
     { value: "10+", label: "tecnologías" },
     { value: "2", label: "perfiles fusionados" },
   ],
@@ -95,25 +95,6 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: 6,
-      name: "FindYourPrompt",
-      category: "fullstack",
-      desc: "Plataforma para descubrir, crear y compartir prompts optimizados para IA.",
-      stack: ["React", "TypeScript", "AI", "CSS3"],
-      repo: "https://github.com/jorgeoliver7/findyourprompt",
-      live: "findyourprompt-one.vercel.app",
-      year: "2025",
-    },
-    {
-      id: 7,
-      name: "Noventa Scouting",
-      category: "data",
-      desc: "Scouting futbolístico por 90 minutos: métricas per-90, percentiles posicionales, búsqueda por similitud e informes one-page sobre API-Football.",
-      stack: ["Python", "FastAPI", "Streamlit", "SQLite"],
-      repo: "https://github.com/jorgeoliver7/noventa-scouting",
-      year: "2026",
-    },
-    {
-      id: 8,
       name: "F1 Data Analysis",
       category: "data",
       desc: "Análisis completo de F1 con FastF1: ETL, 25+ visualizaciones, telemetría, clasificación multi-sesión y modelos Random Forest + XGBoost.",
@@ -122,17 +103,7 @@ window.PORTFOLIO_DATA = {
       year: "2026",
     },
     {
-      id: 9,
-      name: "iRacing Setup Assistant",
-      category: "fullstack",
-      desc: "Encuentra, genera y comparte configuraciones óptimas de iRacing por circuito.",
-      stack: ["React", "Node.js", "PostgreSQL", "Socket.io"],
-      repo: "https://github.com/jorgeoliver7/iRacingSetupAssistant",
-      live: "i-racing-setup-assistant.vercel.app",
-      year: "2025",
-    },
-    {
-      id: 10,
+      id: 7,
       name: "Amazon FC Analytics Suite",
       category: "data",
       desc: "Suite de analytics operativos para fulfillment center: patio (Turn Time, OTD), productividad UPH, asistente KPI con Claude API y modelo SQL con 30+ queries avanzadas.",
