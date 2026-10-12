@@ -348,12 +348,12 @@
   }
 
   function projectLinks(p) {
-    var links = [];
+    // Un proyecto con demo integrada sólo enseña ese enlace.
     if (p.demo) {
-      links.push(
-        '<a class="a-project-link a-project-link--demo" href="' + p.demo + '">probar demo →</a>'
-      );
+      return '<div class="a-project-actions">' +
+        '<a class="a-project-link a-project-link--demo" href="' + p.demo + '">probar demo →</a></div>';
     }
+    var links = [];
     if (p.repo) {
       links.push(
         '<a class="a-project-link" href="' + p.repo + '" target="_blank" rel="noopener">repo ↗</a>'
@@ -361,7 +361,7 @@
     }
     if (p.live) {
       links.push(
-        '<a class="a-project-link" href="https://' + p.live + '" target="_blank" rel="noopener">' + (p.demo ? 'app completa ↗' : 'visitar ↗') + '</a>'
+        '<a class="a-project-link" href="https://' + p.live + '" target="_blank" rel="noopener">visitar ↗</a>'
       );
     }
     return links.length
