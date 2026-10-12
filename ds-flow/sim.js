@@ -8,7 +8,7 @@
 
   // ── Estado ────────────────────────────────────────────
   const S = {
-    t: 0, speed: 1, paused: false, auto: true,
+    t: 0, speed: 10 / 60, paused: false, auto: true,
     pkgs: new Map(),
     trucks: [], vans: [], transit: [],
     receiveQ: [], inductQ: [],
@@ -135,6 +135,8 @@
       case "aisle": p.where = "aisle"; S.aisles[r.aisle].queue.push(p); break;
       case "bag":
         p.where = "bag"; r.bag.push(p); S.stowed++; S.stowLog.push(S.t);
+        r.bump = performance.now() / 1000;
+        if (Math.random() < 0.35) { const c = bagCenter(r); burst(c.x, bagRect(r).y + 4, C.aisle[r.aisle], 3, 1.2); }
         S.dockToStow.push(S.t - p.unloadedAt); trim(S.dockToStow, 120);
         hist(p, `Stow en la saca ${r.code} · pasillo ${ST.aisles[r.aisle].id}`);
         break;
@@ -142,7 +144,7 @@
       case "van": {
         const v = S.vans.find((x) => x.id === tr.van);
         p.where = "van"; p.van = tr.van;
-        if (v) { v.incoming--; v.loaded++; v.items.push(p); }
+        if (v) { v.incoming--; v.loaded++; v.items.push(p); v.bump = performance.now() / 1000; }
         hist(p, `Cargado en la furgoneta ${tr.van}`);
         break;
       }
@@ -187,6 +189,7 @@
   function depart(v) {
     const r = S.routes[v.route - 1];
     v.state = "leaving"; v.p = 0; r.van = null; r.out += v.loaded;
+    { const c = padCenter(v.pad); burst(c.x, c.y, C.aisle[r.aisle], 16, 2.2); burst(c.x, c.y, C.box, 8, 1.6); }
     const yardTime = S.t - v.calledAt;
     S.vanTimes.push(yardTime); trim(S.vanTimes, 100);
     if (yardTime <= Y.onTimeMinutes) S.vansOnTime++;
@@ -198,13 +201,15 @@
     log(`Furgoneta ${v.id} sale a reparto con ${v.loaded} paquetes (${r.code} · ${fmtMin(yardTime)} en yard)`, "out");
   }
 
+  const VEH = 1; // minutos simulados que tarda un vehículo en atracar o salir
+
   // ── Paso de simulación (dt en minutos simulados) ──────
   function step(dt) {
     S.t += dt;
 
     // Camiones
     for (const t of S.trucks) {
-      if (t.state === "arriving") { t.p += dt / 1.5; if (t.p >= 1) { t.state = "unloading"; t.p = 1; } }
+      if (t.state === "arriving") { t.p += dt / VEH; if (t.p >= 1) { t.state = "unloading"; t.p = 1; } }
       else if (t.state === "unloading") {
         t.acc += (D.unloadRate / 60) * dt;
         while (t.acc >= 1 && t.units > 0) {
@@ -213,7 +218,7 @@
           send(p, [{ x, y: D.wallY }, { x: Math.max(x + (Math.random() - 0.5) * 30, R.x + 10), y: R.y + 14 }], "receive");
         }
         if (!t.units) { t.state = "leaving"; t.p = 0; log(`Camión ${t.id} vacío, libera el muelle ${t.dock + 1}`, "in"); }
-      } else t.p += dt / 1.5;
+      } else t.p += dt / VEH;
     }
     S.trucks = S.trucks.filter((t) => !(t.state === "leaving" && t.p >= 1));
 
@@ -266,7 +271,7 @@
     // Furgonetas
     for (const v of S.vans) {
       const r = S.routes[v.route - 1];
-      if (v.state === "arriving") { v.p += dt / 1.5; if (v.p >= 1) { v.state = "loading"; v.p = 1; } }
+      if (v.state === "arriving") { v.p += dt / VEH; if (v.p >= 1) { v.state = "loading"; v.p = 1; } }
       else if (v.state === "loading") {
         v.acc = Math.min(v.acc + (Y.loadRate / 60) * dt, 3);
         while (v.acc >= 1 && r.cart.length) {
@@ -275,7 +280,7 @@
           send(p, [c, { x: P.x + P.w, y: c.y }, { x: Y.x + 6, y: pc.y }, pc], "van", { van: v.id });
         }
         if (v.loaded >= v.expected && !v.incoming) depart(v);
-      } else v.p += dt / 1.5;
+      } else v.p += dt / VEH;
     }
     S.vans = S.vans.filter((v) => !(v.state === "leaving" && v.p >= 1));
 
@@ -302,7 +307,7 @@
       const inPlant = S.received - S.dispatched;
       if (inPlant < 2600 && S.receiveQ.length < 120 && S.t - S.lastAutoTruck > 4) { addTruck(false); S.lastAutoTruck = S.t; }
       if (S.t - S.lastAutoVan > 0.5) {
-        const r = S.routes.filter((x) => !x.van && x.bag.length >= 35).sort((a, b) => b.bag.length - a.bag.length)[0];
+        const r = S.routes.filter((x) => !x.van && x.bag.length >= 30).sort((a, b) => b.bag.length - a.bag.length)[0];
         if (r && freePad() >= 0) callVan(r, false);
         S.lastAutoVan = S.t;
       }
@@ -348,8 +353,12 @@
       raw: g("--ds-raw"), belt: g("--ds-belt"), truck: g("--ds-truck"), van: g("--ds-van"),
       ok: g("--ds-ok"), warn: g("--ds-warn"), bad: g("--ds-bad"), sel: g("--ds-sel"),
       aisle: AISLE_COLORS.map(g),
+      box: g("--ds-box"), tape: g("--ds-tape"), shadow: g("--ds-shadow"), wheel: g("--ds-wheel"),
+      sans: g("--ds-font-sans"), mono: g("--ds-font-mono"),
     };
+    PLAY = document.documentElement.dataset.style === "claude";
   }
+  let PLAY = false; // estilo animado "claude"
 
   let scale = 1;
   function resize() {
@@ -365,15 +374,24 @@
     ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
     ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
   }
+  // superficie de zona: en el estilo animado lleva sombra suave
+  function card(x, y, w, h, r) {
+    const rad = PLAY ? r + 6 : r;
+    ctx.save();
+    if (PLAY) { ctx.shadowColor = C.shadow; ctx.shadowBlur = 18; ctx.shadowOffsetY = 4; }
+    ctx.fillStyle = C.zone; rr(x, y, w, h, rad); ctx.fill();
+    ctx.restore();
+    rr(x, y, w, h, rad);
+  }
   const isSel = (kind, id) => S.selected && S.selected.kind === kind && S.selected.id === id;
   function text(s, x, y, font, color, align) {
     ctx.font = font; ctx.fillStyle = color; ctx.textAlign = align || "left"; ctx.fillText(s, x, y); ctx.textAlign = "left";
   }
-  const MONO = (w, s) => `${w} ${s}px 'JetBrains Mono', monospace`;
-  const SANS = (w, s) => `${w} ${s}px Inter, sans-serif`;
+  const MONO = (w, s) => `${w} ${s}px ${C.mono}`;
+  const SANS = (w, s) => `${w} ${s}px ${C.sans}`;
 
   function zoneBox(z, kind, loadM) {
-    ctx.fillStyle = C.zone; rr(z.x, z.y, z.w, z.h, 10); ctx.fill();
+    card(z.x, z.y, z.w, z.h, 10);
     ctx.lineWidth = isSel("zone", kind) ? 2.5 : 1; ctx.strokeStyle = isSel("zone", kind) ? C.sel : C.line; ctx.stroke();
     if (loadM !== undefined) { ctx.fillStyle = loadColor(loadM); rr(z.x, z.y, z.w, 4, 2); ctx.fill(); }
     ctx.textBaseline = "top";
@@ -392,7 +410,9 @@
       ctx.save(); ctx.lineCap = "round"; ctx.lineJoin = "round";
       ctx.strokeStyle = C.belt; ctx.lineWidth = w; ctx.setLineDash([]);
       ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y))); ctx.stroke();
-      ctx.strokeStyle = C.grid; ctx.lineWidth = 1.5; ctx.setLineDash([4, 9]); ctx.lineDashOffset = S.paused ? 0 : -time * 20;
+      if (PLAY) { ctx.strokeStyle = C.floor; ctx.lineWidth = w - 5; ctx.setLineDash([2, 6]); }
+      else { ctx.strokeStyle = C.grid; ctx.lineWidth = 1.5; ctx.setLineDash([4, 9]); }
+      ctx.lineDashOffset = S.paused ? 0 : -time * (PLAY ? 12 : 20) * Math.min(S.speed * 6, 4);
       ctx.beginPath(); pts.forEach((p, i) => (i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y))); ctx.stroke();
       ctx.restore();
     };
@@ -421,7 +441,18 @@
   function drawTruck(t) {
     const off = t.state === "arriving" ? (1 - ease(t.p)) * -130 : t.state === "leaving" ? ease(t.p) * -130 : 0;
     const w = 66, h = 96, x = dockX(t.dock) - w / 2, y = D.wallY - h - 6 + off;
-    ctx.fillStyle = C.truck; rr(x, y, w, h, 5); ctx.fill();
+    if (PLAY) {
+      const moving = t.state !== "unloading";
+      ctx.fillStyle = C.wheel;
+      for (const wy of [y + 18, y + h - 22]) for (const wx of [x - 4, x + w - 2]) {
+        rr(wx, wy, 6, 14, 2); ctx.fill();
+        if (moving) { ctx.fillStyle = C.floor; ctx.fillRect(wx + 1, wy + ((NOW * 40) % 12), 4, 2); ctx.fillStyle = C.wheel; }
+      }
+      if (moving && Math.random() < 0.3) burst(x + w / 2 + (Math.random() - 0.5) * 20, y - 10, C.line, 1, 0.5);
+      ctx.save(); ctx.shadowColor = C.shadow; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3;
+      ctx.fillStyle = C.truck; rr(x, y, w, h, 10); ctx.fill(); ctx.restore();
+      rr(x, y, w, h, 10);
+    } else { ctx.fillStyle = C.truck; rr(x, y, w, h, 5); ctx.fill(); }
     if (isSel("truck", t.id)) { ctx.strokeStyle = C.sel; ctx.lineWidth = 2; ctx.stroke(); }
     ctx.fillStyle = C.line; rr(x + 10, y - 8, w - 20, 12, 3); ctx.fill(); // cabina
     ctx.fillStyle = C.raw; ctx.fillRect(x + 7, y + h - 12, (w - 14) * (t.units / t.total), 4);
@@ -447,7 +478,7 @@
     const perAisle = rate(ST.rate, "stow", ST) / S.aisles.length / 60;
     for (const a of S.aisles) {
       const sel = isSel("aisle", a.id);
-      ctx.fillStyle = C.zone; rr(ST.x, a.y, ST.w, ST.h, 10); ctx.fill();
+      card(ST.x, a.y, ST.w, ST.h, 10);
       ctx.lineWidth = sel ? 2.5 : 1; ctx.strokeStyle = sel ? C.sel : C.line; ctx.stroke();
       ctx.fillStyle = loadColor(a.queue.length / perAisle); rr(ST.x, a.y, 4, ST.h, 2); ctx.fill();
       ctx.textBaseline = "middle";
@@ -455,14 +486,21 @@
       if (a.queue.length) text(a.queue.length + " por stowear", ST.x + 14, a.y + 8, MONO(500, 9), C.soft);
     }
     for (const r of S.routes) {
-      const b = bagRect(r), col = C.aisle[r.aisle], f = Math.min(r.bag.length / ST.bagCapacity, 1);
-      ctx.fillStyle = C.floor; rr(b.x, b.y, b.w, b.h, 6); ctx.fill();
-      ctx.save(); rr(b.x, b.y, b.w, b.h, 6); ctx.clip();
+      let b = bagRect(r);
+      const col = C.aisle[r.aisle], f = Math.min(r.bag.length / ST.bagCapacity, 1);
+      if (PLAY) {
+        // la saca se infla con la carga y rebota al recibir un paquete
+        const k = bump(r.bump || 0, NOW), sx = 0.9 + f * 0.1 + k * 0.06, sy = 0.92 + f * 0.08 - k * 0.04;
+        b = { x: b.x + (b.w * (1 - sx)) / 2, y: b.y + b.h * (1 - sy), w: b.w * sx, h: b.h * sy };
+        ctx.fillStyle = col; rr(b.x + b.w / 2 - 5, b.y - 4, 10, 6, 3); ctx.fill(); // nudo
+      }
+      ctx.fillStyle = C.floor; rr(b.x, b.y, b.w, b.h, PLAY ? 10 : 6); ctx.fill();
+      ctx.save(); rr(b.x, b.y, b.w, b.h, PLAY ? 10 : 6); ctx.clip();
       ctx.fillStyle = col; ctx.globalAlpha = 0.7; ctx.fillRect(b.x, b.y + b.h * (1 - f), b.w, b.h * f); ctx.restore();
       const full = r.bag.length >= ST.bagCapacity, sel = isSel("route", r.n);
       ctx.lineWidth = r.van || sel || full ? 2 : 1;
       ctx.strokeStyle = sel ? C.sel : full ? C.bad : r.van ? C.ok : C.line;
-      rr(b.x, b.y, b.w, b.h, 6); ctx.stroke();
+      rr(b.x, b.y, b.w, b.h, PLAY ? 10 : 6); ctx.stroke();
       ctx.textBaseline = "top";
       text(r.code, b.x + b.w / 2, b.y + 5, MONO(600, 9), C.fg, "center");
       text(String(r.bag.length), b.x + b.w / 2, b.y + b.h - 15, MONO(600, 10), C.fg, "center");
@@ -473,7 +511,7 @@
 
   function drawPick() {
     const toPick = S.routes.reduce((s, r) => s + r.toPick, 0);
-    ctx.fillStyle = C.zone; rr(P.x, P.y, P.w, P.h, 10); ctx.fill();
+    card(P.x, P.y, P.w, P.h, 10);
     ctx.lineWidth = isSel("zone", "pick") ? 2.5 : 1; ctx.strokeStyle = isSel("zone", "pick") ? C.sel : C.line; ctx.stroke();
     ctx.fillStyle = loadColor(toPick / (rate(P.rate, "pick", P) / 60)); rr(P.x, P.y, P.w, 4, 2); ctx.fill();
     ctx.textBaseline = "top";
@@ -512,10 +550,23 @@
       const p = padRect(v.pad), r = S.routes[v.route - 1];
       const off = v.state === "arriving" ? (1 - ease(v.p)) * 120 : v.state === "leaving" ? ease(v.p) * -120 : 0;
       ctx.globalAlpha = v.state === "arriving" ? Math.max(ease(v.p), 0.05) : v.state === "leaving" ? 1 - ease(v.p) : 1;
-      const x = p.x + 6, y = p.y + 12 + off, w = p.w - 12, h = p.h - 18;
-      ctx.fillStyle = C.van; rr(x, y, w, h, 6); ctx.fill();
+      let x = p.x + 6, y = p.y + 12 + off, w = p.w - 12, h = p.h - 18;
+      if (PLAY) {
+        // la furgoneta se hunde un poco con cada paquete y lleva ruedas que giran al moverse
+        const k = bump(v.bump || 0, NOW);
+        y += k * 2;
+        ctx.fillStyle = C.wheel;
+        for (const wy of [y + 10, y + h - 16]) for (const wx of [x - 3, x + w - 3]) {
+          rr(wx, wy, 6, 11, 2); ctx.fill();
+          if (v.state !== "loading") { ctx.fillStyle = C.floor; ctx.fillRect(wx + 1, wy + ((NOW * 40) % 9), 4, 2); ctx.fillStyle = C.wheel; }
+        }
+        if (v.state === "leaving" && Math.random() < 0.5) burst(x + w / 2, y + h + 4, C.line, 1, 0.6);
+        ctx.save(); ctx.shadowColor = C.shadow; ctx.shadowBlur = 10; ctx.shadowOffsetY = 3;
+        ctx.fillStyle = C.van; rr(x, y, w, h, 12); ctx.fill(); ctx.restore();
+        ctx.fillStyle = C.line; rr(x + 8, y - 3, w - 16, 6, 3); ctx.fill(); // parabrisas
+      } else { ctx.fillStyle = C.van; rr(x, y, w, h, 6); ctx.fill(); }
       ctx.fillStyle = C.aisle[r.aisle]; ctx.fillRect(x + 4, y, w - 8, 3);
-      if (isSel("van", v.id)) { ctx.strokeStyle = C.sel; ctx.lineWidth = 2; rr(x, y, w, h, 6); ctx.stroke(); }
+      if (isSel("van", v.id)) { ctx.strokeStyle = C.sel; ctx.lineWidth = 2; rr(x, y, w, h, PLAY ? 12 : 6); ctx.stroke(); }
       ctx.fillRect(x + 6, y + h - 9, (w - 12) * (v.loaded / Math.max(v.expected, 1)), 4);
       ctx.textBaseline = "top";
       text(v.id, x + 6, y + 9, MONO(600, 10), C.fg);
@@ -526,13 +577,47 @@
     }
   }
 
-  function drawTransit() {
+  function drawTransit(time) {
     for (const tr of S.transit) {
       const p = posOf(tr), pkg = tr.pkg;
-      ctx.fillStyle = pkg.sorted ? C.aisle[S.routes[pkg.route - 1].aisle] : C.raw;
-      ctx.fillRect(p.x - 3.5, p.y - 3.5, 7, 7);
+      const col = pkg.sorted ? C.aisle[S.routes[pkg.route - 1].aisle] : C.raw;
+      if (!PLAY) { ctx.fillStyle = col; ctx.fillRect(p.x - 3.5, p.y - 3.5, 7, 7); continue; }
+      // cajita de cartón que se balancea, con la cinta del color de su pasillo
+      const seed = pkg.seed || (pkg.seed = Math.random() * 6.28);
+      const big = pkg.size === "Grande" ? 1.35 : pkg.size === "Sobre" ? 0.8 : 1;
+      ctx.save();
+      ctx.translate(p.x, p.y + Math.sin(time * 9 + seed) * 0.9);
+      ctx.rotate(Math.sin(time * 3 + seed) * 0.14);
+      ctx.scale(big, big);
+      ctx.fillStyle = C.shadow; rr(-4.5, -3, 10, 9, 2); ctx.fill();
+      ctx.fillStyle = C.box; rr(-5, -5, 10, 9, 2); ctx.fill();
+      ctx.fillStyle = col; ctx.fillRect(-1.2, -5, 2.4, 9);
+      ctx.restore();
     }
   }
+
+  // ── Partículas (solo estilo animado) ──────────────────
+  const fx = [];
+  function burst(x, y, color, n, power) {
+    if (!PLAY || fx.length > 400) return;
+    for (let i = 0; i < n; i++) {
+      const a = Math.random() * Math.PI * 2, v = (0.4 + Math.random()) * power;
+      fx.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - power * 0.6, life: 1, color, r: 1.5 + Math.random() * 2 });
+    }
+  }
+  let fxLast = 0;
+  function drawFx(time) {
+    const dt = Math.min(time - fxLast, 0.05); fxLast = time;
+    for (let i = fx.length - 1; i >= 0; i--) {
+      const f = fx[i];
+      f.x += f.vx * dt * 60; f.y += f.vy * dt * 60; f.vy += 0.12 * dt * 60; f.life -= dt * 1.6;
+      if (f.life <= 0) { fx.splice(i, 1); continue; }
+      ctx.globalAlpha = f.life; ctx.fillStyle = f.color;
+      ctx.beginPath(); ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+  const bump = (since, now) => Math.max(0, 1 - (now - since) * 5);
 
   function trackedPos() {
     const p = S.tracked && S.pkgs.get(S.tracked);
@@ -550,19 +635,35 @@
     return null;
   }
 
+  let NOW = 0;
   function draw(time) {
+    NOW = time;
     ctx.fillStyle = C.floor; ctx.fillRect(0, 0, L.width, L.height);
-    ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
-    for (let x = 0; x < L.width; x += 40) { ctx.beginPath(); ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, L.height); ctx.stroke(); }
-    for (let y = 0; y < L.height; y += 40) { ctx.beginPath(); ctx.moveTo(0, y + 0.5); ctx.lineTo(L.width, y + 0.5); ctx.stroke(); }
+    if (PLAY) {
+      ctx.fillStyle = C.grid;
+      for (let x = 12; x < L.width; x += 24) for (let y = 12; y < L.height; y += 24) ctx.fillRect(x - 1, y - 1, 2, 2);
+    } else {
+      ctx.strokeStyle = C.grid; ctx.lineWidth = 1;
+      for (let x = 0; x < L.width; x += 40) { ctx.beginPath(); ctx.moveTo(x + 0.5, 0); ctx.lineTo(x + 0.5, L.height); ctx.stroke(); }
+      for (let y = 0; y < L.height; y += 40) { ctx.beginPath(); ctx.moveTo(0, y + 0.5); ctx.lineTo(L.width, y + 0.5); ctx.stroke(); }
+    }
     drawDocks(); drawBelts(time);
     drawQueueZone(R, "receive", S.receiveQ, R);
     drawQueueZone(I, "induct", S.inductQ, I);
     drawAisles(); drawPick(); drawYard();
     for (const t of S.trucks) drawTruck(t);
-    drawTransit();
+    drawTransit(time);
+    drawFx(time);
     const tp = trackedPos();
-    if (tp) {
+    if (tp && PLAY) {
+      // ondas que salen del paquete rastreado
+      for (let i = 0; i < 3; i++) {
+        const ph = (time * 0.8 + i / 3) % 1;
+        ctx.globalAlpha = 1 - ph; ctx.strokeStyle = C.sel; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(tp.x, tp.y, 6 + ph * 26, 0, Math.PI * 2); ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+    } else if (tp) {
       const pulse = 10 + Math.sin(time * 6) * 3;
       ctx.strokeStyle = C.sel; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(tp.x, tp.y, pulse, 0, Math.PI * 2); ctx.stroke();
       ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(tp.x, tp.y, pulse + 8, 0, Math.PI * 2); ctx.stroke();
@@ -724,7 +825,8 @@
     pauseBtn.textContent = S.paused ? "▶ Reanudar" : "❚❚ Pausa";
     pauseBtn.setAttribute("aria-pressed", String(S.paused));
   });
-  $("#ds-speed").addEventListener("change", (e) => { S.speed = Number(e.target.value); });
+  // el selector es un multiplicador sobre tiempo real; el motor avanza en minutos simulados
+  $("#ds-speed").addEventListener("change", (e) => { S.speed = Number(e.target.value) / 60; });
   $("#ds-auto").addEventListener("change", (e) => { S.auto = e.target.checked; });
   $("#ds-track-form").addEventListener("submit", (e) => { e.preventDefault(); track($("#ds-search").value.trim().toUpperCase()); });
   $("#ds-random").addEventListener("click", () => {
@@ -745,6 +847,16 @@
     themeBtn.textContent = t === "light" ? "☾" : "☀";
     readColors();
   }
+  // Estilo visual: "claude" (cálido y animado) o "editorial" (sobrio, el del portfolio)
+  const stylePicks = document.querySelectorAll("[data-style-pick]");
+  function applyStyle(st) {
+    document.documentElement.dataset.style = st;
+    try { localStorage.setItem("ds-style", st); } catch (e) {}
+    stylePicks.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.stylePick === st)));
+    readColors();
+  }
+  stylePicks.forEach((b) => b.addEventListener("click", () => applyStyle(b.dataset.stylePick)));
+  applyStyle(document.documentElement.dataset.style === "editorial" ? "editorial" : "claude");
   themeBtn.addEventListener("click", () => applyTheme(document.documentElement.dataset.theme === "light" ? "dark" : "light"));
   let saved = "dark"; try { saved = localStorage.getItem("a-theme") || "dark"; } catch (e) {}
   applyTheme(saved === "light" ? "light" : "dark");
@@ -762,7 +874,6 @@
 
   window.addEventListener("resize", resize);
   resize();
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { S.speed = 0.5; $("#ds-speed").value = "0.5"; }
 
   // Arranque: algo de volumen ya en las sacas para que el mapa tenga vida desde el principio
   const seedTruck = { id: "T-100", dock: 0 };
@@ -773,6 +884,8 @@
     S.received++; S.stowed++;
   }
   addTruck(false); addTruck(false); addTruck(false);
+  // y unas cuantas rutas ya cargando en el yard
+  S.routes.slice().sort((x, y) => y.bag.length - x.bag.length).slice(0, 3).forEach((r) => callVan(r, false));
   renderDetail(); renderLog(); renderKpis();
   requestAnimationFrame(frame);
 })();

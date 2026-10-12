@@ -30,7 +30,7 @@ window.DS_LAYOUT = {
     desc: "Cada paquete se pone en el conveyor. Al escanearlo, el sistema le asigna su ruta y el pasillo al que tiene que ir.",
   },
 
-  conveyor: { x: 95, top: 200, bottom: 676, speed: 320 }, // px por minuto simulado
+  conveyor: { x: 95, top: 200, bottom: 676, speed: 240 }, // px por minuto simulado (~0,5 m/s a escala del plano)
 
   stow: {
     name: "Stow a sacas", code: "STW",
