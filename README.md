@@ -25,8 +25,6 @@ Portfolio personal de **Jorge Acedo**, desarrollador de software y analista de d
 
 | Proyecto | Stack | Demo |
 |---|---|---|
-| FindYourPrompt | React, JS, AI | [Ver](https://findyourprompt-one.vercel.app/) |
-| iRacing Setup Assistant | React, Node.js, PostgreSQL, Socket.io | [Ver](https://i-racing-setup-assistant.vercel.app/) |
 | F1 Championship Predictor | Java, Python, ML | GitHub |
 | TechStore Backend API | Java 17, Spring Boot, Spring Security | GitHub |
 | Bet4Fun | Python, Flask, React | GitHub |
