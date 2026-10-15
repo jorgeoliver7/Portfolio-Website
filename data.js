@@ -50,8 +50,8 @@ window.PORTFOLIO_DATA = {
       category: "data",
       desc: "Mapa interactivo y animado de una estación de reparto de última milla: camiones, inducción, conveyor, stow a sacas, pick por rutas y yard. Rastreo de cada paquete y centro de control con KPIs del ciclo en vivo.",
       stack: ["JavaScript", "Canvas", "Simulación", "KPIs logísticos"],
-      repo: "https://github.com/jorgeoliver7/Portfolio-Website/tree/main/ds-flow",
-      live: "jorgeoliver7.github.io/Portfolio-Website/ds-flow/",
+      repo: "https://github.com/jorgeoliver7/ds-flow",
+      live: "jorgeoliver7.github.io/ds-flow/",
       year: "2026",
     },
     {
