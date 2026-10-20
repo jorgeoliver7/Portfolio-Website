@@ -364,6 +364,11 @@
         '<a class="a-project-link" href="https://' + p.live + '" target="_blank" rel="noopener">visitar ↗</a>'
       );
     }
+    (p.extra || []).forEach(function (x) {
+      links.push(
+        '<a class="a-project-link" href="https://' + x.url + '" target="_blank" rel="noopener">' + x.label + ' ↗</a>'
+      );
+    });
     return links.length
       ? '<div class="a-project-actions">' + links.join('') + '</div>'
       : '';
