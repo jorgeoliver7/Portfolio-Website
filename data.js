@@ -48,10 +48,11 @@ window.PORTFOLIO_DATA = {
       id: 1,
       name: "DS Flow",
       category: "data",
-      desc: "Mapa interactivo y animado de una estación de reparto de última milla: camiones, inducción, conveyor, stow a sacas, pick por rutas y yard. Rastreo de cada paquete y centro de control con KPIs del ciclo en vivo.",
-      stack: ["JavaScript", "Canvas", "Simulación", "KPIs logísticos"],
+      desc: "Mapa interactivo y animado de una estación de reparto de última milla: camiones, inducción, conveyor, stow a sacas, pick por rutas y yard. Incluye un mapa de calor del reparto en la provincia de Cádiz con lluvia, flash flood o huelga, y un modelo de IA (gradient boosting + Shapley) que predice la entrega zona a zona.",
+      stack: ["JavaScript", "Canvas", "Simulación", "Python", "scikit-learn"],
       repo: "https://github.com/jorgeoliver7/ds-flow",
       live: "jorgeoliver7.github.io/ds-flow/",
+      extra: [{ label: "mapa de Cádiz", url: "jorgeoliver7.github.io/ds-flow/mapa/" }],
       year: "2026",
     },
     {
